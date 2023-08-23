@@ -1,0 +1,41 @@
+<.header>
+  Listing Admins
+  <:actions>
+    <.link patch={~p"/admins/new"}>
+      <.button>New Admin</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="admins"
+  rows={@streams.admins}
+  row_click={fn {_id, admin} -> JS.navigate(~p"/admins/#{admin}") end}
+>
+  <:col :let={{_id, admin}} label="Admin role"><%= admin.admin_role %></:col>
+  <:action :let={{_id, admin}}>
+    <div class="sr-only">
+      <.link navigate={~p"/admins/#{admin}"}>Show</.link>
+    </div>
+    <.link patch={~p"/admins/#{admin}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, admin}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: admin.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="admin-modal" show on_cancel={JS.patch(~p"/admins")}>
+  <.live_component
+    module={EmailNotificationWeb.AdminLive.FormComponent}
+    id={@admin.id || :new}
+    title={@page_title}
+    action={@live_action}
+    admin={@admin}
+    patch={~p"/admins"}
+  />
+</.modal>
