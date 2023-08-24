@@ -3,32 +3,32 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
 
   alias EmailNotification.Emails
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage email records in your database.</:subtitle>
-      </.header>
+  # @impl true
+  # def render(assigns) do
+  #   ~H"""
+  #   <div>
+  #     <.header>
+  #       <%= @title %>
+  #       <:subtitle>Use this form to manage email records in your database.</:subtitle>
+  #     </.header>
 
-      <.simple_form
-        for={@form}
-        id="email-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:subject]} type="text" label="Subject" />
-        <.input field={@form[:body]} type="text" label="Body" />
-        <.input field={@form[:status]} type="text" label="Status" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Email</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
+  #     <.simple_form
+  #       for={@form}
+  #       id="email-form"
+  #       phx-target={@myself}
+  #       phx-change="validate"
+  #       phx-submit="save"
+  #     >
+  #       <.input field={@form[:subject]} type="text" label="Subject" />
+  #       <.input field={@form[:body]} type="text" label="Body" />
+  #       <.input field={@form[:contacts]} type="text" label="Contact" />
+  #       <:actions>
+  #         <.button phx-disable-with="Saving...">Send Email</.button>
+  #       </:actions>
+  #     </.simple_form>
+  #   </div>
+  #   """
+  # end
 
   @impl true
   def update(%{email: email} = assigns, socket) do
@@ -51,7 +51,9 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   end
 
   def handle_event("save", %{"email" => email_params}, socket) do
-    save_email(socket, socket.assigns.action, email_params)
+    current_user = socket.assigns.current_user
+    email_params_with_user = Map.put(email_params, "user_id", current_user.id)
+    save_email(socket, socket.assigns.action, email_params_with_user)
   end
 
   defp save_email(socket, :edit, email_params) do

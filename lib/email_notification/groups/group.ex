@@ -4,6 +4,8 @@ defmodule EmailNotification.Groups.Group do
 
   schema "groups" do
     field :name, :string
+    has_many :group_contacts, EmailNotification.GroupContacts.GroupContact
+    has_many :contacts, through: [:group_contacts, :contact]
     belongs_to :user, EmailNotification.Accounts.User
 
 

@@ -101,4 +101,6 @@ defmodule EmailNotification.Groups do
   def change_group(%Group{} = group, attrs \\ %{}) do
     Group.changeset(group, attrs)
   end
+
+  
 end

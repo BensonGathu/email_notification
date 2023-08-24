@@ -8,7 +8,7 @@ defmodule EmailNotification.Repo.Migrations.CreateGroups do
 
       timestamps()
     end
-
+    create unique_index(:groups, [:name])
     create index(:groups, [:user_id])
   end
 end

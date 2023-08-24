@@ -1,32 +1,33 @@
 defmodule EmailNotificationWeb.GroupLive.FormComponent do
+  require Logger
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.Groups
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage group records in your database.</:subtitle>
-      </.header>
+  # @impl true
+  # def render(assigns) do
+  #   ~H"""
+  #   <div>
+  #     <.header>
+  #       <%= @title %>
+  #       <:subtitle>Use this form to manage group records in your database.</:subtitle>
+  #     </.header>
 
-      <.simple_form
-        for={@form}
-        id="group-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Group</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
+  #     <.simple_form
+  #       for={@form}
+  #       id="group-form"
+  #       phx-target={@myself}
+  #       phx-change="validate"
+  #       phx-submit="save"
+  #     >
+  #       <.input field={@form[:name]} type="text" label="Name" />
+  #       <:actions>
+  #         <.button phx-disable-with="Saving...">Save Group</.button>
+  #       </:actions>
+  #     </.simple_form>
+  #   </div>
+  #   """
+  # end
 
   @impl true
   def update(%{group: group} = assigns, socket) do
@@ -49,7 +50,10 @@ defmodule EmailNotificationWeb.GroupLive.FormComponent do
   end
 
   def handle_event("save", %{"group" => group_params}, socket) do
-    save_group(socket, socket.assigns.action, group_params)
+    current_user = socket.assigns.current_user
+
+    group_params_with_user = Map.put(group_params, "user_id", current_user.id)
+    save_group(socket, socket.assigns.action, group_params_with_user)
   end
 
   defp save_group(socket, :edit, group_params) do

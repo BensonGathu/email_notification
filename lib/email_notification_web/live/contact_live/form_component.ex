@@ -1,34 +1,35 @@
 defmodule EmailNotificationWeb.ContactLive.FormComponent do
+  require Logger
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.Contacts
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage contact records in your database.</:subtitle>
-      </.header>
+  # @impl true
+  # def render(assigns) do
+  #   ~H"""
+  #   <div>
+  #     <.header>
+  #       <%= @title %>
+  #       <:subtitle>Use this form to manage contact records in your database.</:subtitle>
+  #     </.header>
 
-      <.simple_form
-        for={@form}
-        id="contact-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:first_name]} type="text" label="First name" />
-        <.input field={@form[:last_name]} type="text" label="Last name" />
-        <.input field={@form[:email_address]} type="text" label="Email address" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Contact</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
+  #     <.simple_form
+  #       for={@form}
+  #       id="contact-form"
+  #       phx-target={@myself}
+  #       phx-change="validate"
+  #       phx-submit="save"
+  #     >
+  #       <.input field={@form[:first_name]} type="text" label="First name" />
+  #       <.input field={@form[:last_name]} type="text" label="Last name" />
+  #       <.input field={@form[:email_address]} type="text" label="Email address" />
+  #       <:actions>
+  #         <.button phx-disable-with="Saving...">Save Contact</.button>
+  #       </:actions>
+  #     </.simple_form>
+  #   </div>
+  #   """
+  # end
 
   @impl true
   def update(%{contact: contact} = assigns, socket) do
@@ -52,14 +53,17 @@ defmodule EmailNotificationWeb.ContactLive.FormComponent do
 
   def handle_event("save", %{"contact" => contact_params}, socket) do
     # add params(user_id) to contact_params
-    #  socket.assigns.currentUser
-    save_contact(socket, socket.assigns.action, contact_params)
+    current_user = socket.assigns.current_user
+    contact_params_with_user = Map.put(contact_params, "user_id", current_user.id)
+    Logger.info("ADDING CONTACT")
+    save_contact(socket, socket.assigns.action, contact_params_with_user)
   end
 
   defp save_contact(socket, :edit, contact_params) do
     case Contacts.update_contact(socket.assigns.contact, contact_params) do
       {:ok, contact} ->
         notify_parent({:saved, contact})
+        #  %{"role"=>["read"]}
 
         {:noreply,
          socket

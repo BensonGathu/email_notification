@@ -27,35 +27,6 @@ defmodule EmailNotificationWeb.Router do
     # live "/users/:id/edit", UserLive.Index, :edit
     # live "/users/:id", UserLive.Show, :show
     # live "/users/:id/show/edit", UserLive.Show, :edit
-
-    # Contacts Routes
-    live "/contacts", ContactLive.Index, :index
-    live "/contacts/new", ContactLive.Index, :new
-    live "/contacts/:id/edit", ContactLive.Index, :edit
-    live "/contacts/:id", ContactLive.Show, :show
-    live "/contacts/:id/show/edit", ContactLive.Show, :edit
-
-    # Emailing Routes
-    live "/emails", EmailLive.Index, :index
-    live "/emails/new", EmailLive.Index, :new
-    live "/emails/:id/edit", EmailLive.Index, :edit
-    live "/emails/:id", EmailLive.Show, :show
-    live "/emails/:id/show/edit", EmailLive.Show, :edit
-
-    # Groups Routes
-    live "/groups", GroupLive.Index, :index
-    live "/groups/new", GroupLive.Index, :new
-    live "/groups/:id/edit", GroupLive.Index, :edit
-    live "/groups/:id", GroupLive.Show, :show
-    live "/groups/:id/show/edit", GroupLive.Show, :edit
-
-    # Admin Routes
-    live "/admins", AdminLive.Index, :index
-    live "/admins/new", AdminLive.Index, :new
-    live "/admins/:id/edit", AdminLive.Index, :edit
-    live "/admins/:id", AdminLive.Show, :show
-    live "/admins/:id/show/edit", AdminLive.Show, :edit
-
   end
 
   # Other scopes may use custom stacks.
@@ -103,6 +74,41 @@ defmodule EmailNotificationWeb.Router do
       on_mount: [{EmailNotificationWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      # Contacts Routes
+      live "/contacts", ContactLive.Index, :index
+      live "/contacts/new", ContactLive.Index, :new
+      live "/contacts/:id/edit", ContactLive.Index, :edit
+      live "/contacts/:id", ContactLive.Show, :show
+      live "/contacts/:id/show/edit", ContactLive.Show, :edit
+      # Emailing Routes
+      live "/emails", EmailLive.Index, :index
+      live "/emails/new", EmailLive.Index, :new
+      live "/emails/:id/edit", EmailLive.Index, :edit
+      live "/emails/:id", EmailLive.Show, :show
+      live "/emails/:id/show/edit", EmailLive.Show, :edit
+
+      # Groups Routes
+      live "/groups", GroupLive.Index, :index
+      live "/groups/new", GroupLive.Index, :new
+      live "/groups/:id/edit", GroupLive.Index, :edit
+      live "/groups/:id", GroupLive.Show, :show
+      live "/groups/:id/show/edit", GroupLive.Show, :edit
+
+      # Admin Routes
+      live "/admins", AdminLive.Index, :index
+      live "/admins/new", AdminLive.Index, :new
+      live "/admins/:id/edit", AdminLive.Index, :edit
+      live "/admins/:id", AdminLive.Show, :show
+      live "/admins/:id/show/edit", AdminLive.Show, :edit
+
+        # GROUP CONTACTS ROUTES
+      live "/groupcontacts", GroupContactLive.Index, :index
+      live "/groupcontacts/new", GroupContactLive.Index, :new
+      live "/groupcontacts/:id/edit", GroupContactLive.Index, :edit
+
+      live "/groupcontacts/:id", GroupContactLive.Show, :show
+      live "/groupcontacts/:id/show/edit", GroupContactLive.Show, :edit
     end
   end
 
