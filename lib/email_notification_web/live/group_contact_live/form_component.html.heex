@@ -1,21 +1,25 @@
-   <div>
-      <.header>
-        <%= @title %>
-        <:subtitle></:subtitle>
-      </.header>
+<div>
+  <.header>
+    <%= @title %>
+    <:subtitle></:subtitle>
+  </.header>
 
-      <.simple_form
-        for={@form}
-        id="group_contact-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-          <.input field={@form[:contact_id]} type="select" label="Contact" options={Enum.map(@contacts, fn contact ->{contact.email_address, contact.id} end )}/>
+  <.simple_form
+    for={@form}
+    id="group_contact-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input
+      field={@form[:contact_id]}
+      type="select"
+      label="Contact"
+      options={Enum.map(@contacts, fn contact -> {contact.email_address, contact.id} end)}
+    />
 
-
-        <:actions>
-          <.button phx-disable-with="Saving...">Add contact</.button>
-        </:actions>
-      </.simple_form> 
-    </div>
+    <:actions>
+      <.button phx-disable-with="Saving...">Add contact</.button>
+    </:actions>
+  </.simple_form>
+</div>

@@ -1,4 +1,5 @@
 defmodule EmailNotificationWeb.GroupContactLive.Index do
+  require Logger
   use EmailNotificationWeb, :live_view
 
   alias EmailNotification.GroupContacts
@@ -6,6 +7,9 @@ defmodule EmailNotificationWeb.GroupContactLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    group_id = _params["id"]
+
+    socket = socket |> assign(:group_id, group_id)
     {:ok, stream(socket, :groupcontacts, GroupContacts.list_groupcontacts())}
   end
 
@@ -33,7 +37,10 @@ defmodule EmailNotificationWeb.GroupContactLive.Index do
   end
 
   @impl true
-  def handle_info({EmailNotificationWeb.GroupContactLive.FormComponent, {:saved, group_contact}}, socket) do
+  def handle_info(
+        {EmailNotificationWeb.GroupContactLive.FormComponent, {:saved, group_contact}},
+        socket
+      ) do
     {:noreply, stream_insert(socket, :groupcontacts, group_contact)}
   end
 

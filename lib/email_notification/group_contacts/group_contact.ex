@@ -15,5 +15,6 @@ defmodule EmailNotification.GroupContacts.GroupContact do
     group_contact
     |> cast(attrs, [:group_id, :contact_id])
     |> validate_required([:group_id, :contact_id])
+    |> unique_constraint([:group_id, :contact_id])
   end
 end

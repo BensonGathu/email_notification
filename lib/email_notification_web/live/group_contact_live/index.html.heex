@@ -1,43 +1,28 @@
 <.header>
-  Listing Groupcontacts
+  Listing Groupcontacts <%= @group_id %>
   <:actions>
     <.link patch={~p"/groupcontacts/new"}>
       <.button>New Group contact</.button>
-    </.link> 
+    </.link>
   </:actions>
 </.header>
- 
-<.table
-  id="groupcontacts"
-  rows={@streams.groupcontacts}
-  row_click={fn {_id, group_contact} -> JS.navigate(~p"/groupcontacts/#{group_contact}") end}
->
-<:col :let={{_id, email}} label="Subject"><%= email.user.email %></:col>
-  <:action :let={{_id, group_contact}}>
-    <div class="sr-only">
-      <.link navigate={~p"/groupcontacts/#{group_contact}"}>Show</.link>
-    </div>
-    <.link patch={~p"/groupcontacts/#{group_contact}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={{id, group_contact}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: group_contact.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
-    >
-      Delete
-    </.link>
-  </:action>
-</.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="group_contact-modal" show on_cancel={JS.patch(~p"/groupcontacts")}>
+
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="group_contact-modal"
+  show
+  on_cancel={JS.patch(~p"/groups/#{@group_id}")}
+>
   <.live_component
     module={EmailNotificationWeb.GroupContactLive.FormComponent}
     id={@group_contact.id || :new}
     title={@page_title}
     action={@live_action}
     group_contact={@group_contact}
-    patch={~p"/groupcontacts"} 
+    patch={~p"/groups/#{@group_id}"}
+    group_id={@group_id}
     current_user={@current_user}
   />
 </.modal>
-  

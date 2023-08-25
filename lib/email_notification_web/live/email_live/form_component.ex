@@ -5,6 +5,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
 
   alias EmailNotification.Emails
   alias EmailNotification.Contacts
+  alias EmailNotification.EmailSender 
 
 
 
@@ -19,7 +20,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
      |> assign(assigns)
      |> assign(:contacts, contact)
      |> assign_form(changeset)}
-  end 
+  end
 
   @impl true
   def handle_event("validate", %{"email" => email_params}, socket) do
@@ -36,7 +37,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
 
     email_params_with_user =
       Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
-
+      EmailSender.send_email(email)
     save_email(socket, socket.assigns.action, email_params_with_user)
   end
 

@@ -1,9 +1,9 @@
 defmodule EmailNotificationWeb.GroupContactLive.FormComponent do
+  require Logger
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.GroupContacts
   alias EmailNotification.Contacts
-
 
   @impl true
   def update(%{group_contact: group_contact} = assigns, socket) do
@@ -29,8 +29,12 @@ defmodule EmailNotificationWeb.GroupContactLive.FormComponent do
   end
 
   def handle_event("save", %{"group_contact" => group_contact_params}, socket) do
-    
-    save_group_contact(socket, socket.assigns.action, group_contact_params)
+    group_id = socket.assigns.group_id
+
+    group_contact_params_group =
+      Map.put(group_contact_params, "group_id", group_id)
+
+    save_group_contact(socket, socket.assigns.action, group_contact_params_group)
   end
 
   defp save_group_contact(socket, :edit, group_contact_params) do

@@ -8,7 +8,6 @@ defmodule EmailNotification.Groups.Group do
     has_many :contacts, through: [:group_contacts, :contact]
     belongs_to :user, EmailNotification.Accounts.User
 
-
     timestamps()
   end
 
@@ -17,5 +16,6 @@ defmodule EmailNotification.Groups.Group do
     group
     |> cast(attrs, [:name, :user_id])
     |> validate_required([:name, :user_id])
+    |> unique_constraint([:user_id, :name])
   end
 end

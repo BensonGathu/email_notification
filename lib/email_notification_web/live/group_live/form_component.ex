@@ -4,30 +4,6 @@ defmodule EmailNotificationWeb.GroupLive.FormComponent do
 
   alias EmailNotification.Groups
 
-  # @impl true
-  # def render(assigns) do
-  #   ~H"""
-  #   <div>
-  #     <.header>
-  #       <%= @title %>
-  #       <:subtitle>Use this form to manage group records in your database.</:subtitle>
-  #     </.header>
-
-  #     <.simple_form
-  #       for={@form}
-  #       id="group-form"
-  #       phx-target={@myself}
-  #       phx-change="validate"
-  #       phx-submit="save"
-  #     >
-  #       <.input field={@form[:name]} type="text" label="Name" />
-  #       <:actions>
-  #         <.button phx-disable-with="Saving...">Save Group</.button>
-  #       </:actions>
-  #     </.simple_form>
-  #   </div>
-  #   """
-  # end
 
   @impl true
   def update(%{group: group} = assigns, socket) do

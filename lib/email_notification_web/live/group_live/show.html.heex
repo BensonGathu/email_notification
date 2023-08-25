@@ -1,8 +1,7 @@
 <.header>
-  Group <%= @group.id %>
-  <:subtitle><%= @group.name %></:subtitle>
+  Group: <%= @group.name %>
   <:actions>
-    <.link patch={~p"/groupcontacts/new"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/groups/#{@group.id}/groupcontacts/new"} phx-click={JS.push_focus()}>
       <.button>Add Member</.button>
     </.link>
   </:actions>
@@ -12,6 +11,24 @@
     </.link>
   </:actions>
 </.header>
+<.header>
+  Members
+</.header>
+<.table id="members" rows={@streams.members} row_click={}>
+  <:col :let={{_id, member}} label="Name">
+    <%= member.contact.first_name %> <%= member.contact.last_name %>
+  </:col>
+
+  <:col :let={{_id, member}} label="Email"><%= member.contact.email_address %></:col>
+  <:action :let={{id, member}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: member.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Remove
+    </.link>
+  </:action>
+</.table>
 
 <.back navigate={~p"/groups"}>Back to groups</.back>
 
@@ -27,23 +44,6 @@
     title={@page_title}
     action={@live_action}
     group={@group}
-    patch={~p"/groups/#{@group}"}
-    current_user={@current_user}
-  />
-</.modal>
-
-<.modal
-  :if={@live_action in [:new, :edit]}
-  id="group_contact-modal"
-  show
-  on_cancel={JS.patch(~p"/groups/#{@group}")}
->
-  <.live_component
-    module={EmailNotificationWeb.GroupLive.FormComponent}
-    id={@group_contact.id || :new}
-    title={@page_title}
-    action={@live_action}
-    group_contact={@group_contact}
     patch={~p"/groups/#{@group}"}
     current_user={@current_user}
   />

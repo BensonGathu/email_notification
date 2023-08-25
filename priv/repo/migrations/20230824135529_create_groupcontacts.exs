@@ -10,6 +10,6 @@ defmodule EmailNotification.Repo.Migrations.CreateGroupcontacts do
     end
 
 
-    create index(:groupcontacts, [:contact_id, :group_id])
+    create unique_index(:groupcontacts, [:contact_id, :group_id])
   end
 end

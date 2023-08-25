@@ -10,7 +10,7 @@ defmodule EmailNotification.Repo.Migrations.CreateContacts do
 
       timestamps()
     end
-
+    create unique_index(:contacts, [:user_id, :email_address])
 
     create index(:contacts, [:user_id,])
   end

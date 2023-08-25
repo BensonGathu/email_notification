@@ -95,6 +95,10 @@ defmodule EmailNotificationWeb.Router do
       live "/groups/:id", GroupLive.Show, :show
       live "/groups/:id/show/edit", GroupLive.Show, :edit
 
+      # CUSTOM GROUP CONTACTS ROUTES
+      live "/groups/:id/groupcontacts/new", GroupContactLive.Index, :new
+
+
       # Admin Routes
       live "/admins", AdminLive.Index, :index
       live "/admins/new", AdminLive.Index, :new
@@ -104,7 +108,7 @@ defmodule EmailNotificationWeb.Router do
 
         # GROUP CONTACTS ROUTES
       live "/groupcontacts", GroupContactLive.Index, :index
-      live "/groupcontacts/new", GroupContactLive.Index, :new
+      # live "/groupcontacts/new", GroupContactLive.Index, :new
       live "/groupcontacts/:id/edit", GroupContactLive.Index, :edit
 
       live "/groupcontacts/:id", GroupContactLive.Show, :show
