@@ -1,44 +1,25 @@
 defmodule EmailNotificationWeb.EmailLive.FormComponent do
+  require Logger
+  alias ElixirSense.Log
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.Emails
+  alias EmailNotification.Contacts
 
-  # @impl true
-  # def render(assigns) do
-  #   ~H"""
-  #   <div>
-  #     <.header>
-  #       <%= @title %>
-  #       <:subtitle>Use this form to manage email records in your database.</:subtitle>
-  #     </.header>
 
-  #     <.simple_form
-  #       for={@form}
-  #       id="email-form"
-  #       phx-target={@myself}
-  #       phx-change="validate"
-  #       phx-submit="save"
-  #     >
-  #       <.input field={@form[:subject]} type="text" label="Subject" />
-  #       <.input field={@form[:body]} type="text" label="Body" />
-  #       <.input field={@form[:contacts]} type="text" label="Contact" />
-  #       <:actions>
-  #         <.button phx-disable-with="Saving...">Send Email</.button>
-  #       </:actions>
-  #     </.simple_form>
-  #   </div>
-  #   """
-  # end
 
   @impl true
   def update(%{email: email} = assigns, socket) do
+    current_user = assigns.current_user
     changeset = Emails.change_email(email)
+    contact = Contacts.get_contact_by_userID!(current_user.id)
 
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:contacts, contact)
      |> assign_form(changeset)}
-  end
+  end 
 
   @impl true
   def handle_event("validate", %{"email" => email_params}, socket) do
@@ -50,9 +31,12 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"email" => email_params}, socket) do
+  def handle_event("save", %{"email" => email_params} = params, socket) do
     current_user = socket.assigns.current_user
-    email_params_with_user = Map.put(email_params, "user_id", current_user.id)
+
+    email_params_with_user =
+      Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
+
     save_email(socket, socket.assigns.action, email_params_with_user)
   end
 

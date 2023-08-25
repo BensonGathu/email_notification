@@ -2,39 +2,19 @@ defmodule EmailNotificationWeb.GroupContactLive.FormComponent do
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.GroupContacts
+  alias EmailNotification.Contacts
 
-  @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage group_contact records in your database.</:subtitle>
-      </.header>
-
-      <.simple_form
-        for={@form}
-        id="group_contact-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Group contact</.button>
-        </:actions>
-      </.simple_form> 
-    </div>
-    """
-  end
 
   @impl true
   def update(%{group_contact: group_contact} = assigns, socket) do
+    current_user = assigns.current_user
     changeset = GroupContacts.change_group_contact(group_contact)
+    contact = Contacts.get_contact_by_userID!(current_user.id)
 
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:contacts, contact)
      |> assign_form(changeset)}
   end
 
@@ -49,6 +29,7 @@ defmodule EmailNotificationWeb.GroupContactLive.FormComponent do
   end
 
   def handle_event("save", %{"group_contact" => group_contact_params}, socket) do
+    
     save_group_contact(socket, socket.assigns.action, group_contact_params)
   end
 

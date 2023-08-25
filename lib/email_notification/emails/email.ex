@@ -11,7 +11,7 @@ defmodule EmailNotification.Emails.Email do
 
     timestamps()
   end
-
+ 
   @doc false
   def changeset(email, attrs) do
     email

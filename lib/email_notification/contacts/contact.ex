@@ -19,5 +19,6 @@ defmodule EmailNotification.Contacts.Contact do
     contact
     |> cast(attrs, [:first_name, :last_name, :email_address, :user_id])
     |> validate_required([:first_name, :last_name, :email_address, :user_id])
+    
   end
 end

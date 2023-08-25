@@ -36,7 +36,10 @@ defmodule EmailNotification.Groups do
 
   """
   def get_group!(id), do: Repo.get!(Group, id)
-
+  def get_groups_by_userID!(id) do
+    from(c in  Group, where: [user_id: ^id])
+    |> Repo.all()
+  end
   @doc """
   Creates a group.
 
@@ -102,5 +105,5 @@ defmodule EmailNotification.Groups do
     Group.changeset(group, attrs)
   end
 
-  
+
 end

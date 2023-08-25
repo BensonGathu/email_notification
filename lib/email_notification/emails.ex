@@ -36,7 +36,10 @@ defmodule EmailNotification.Emails do
 
   """
   def get_email!(id), do: Repo.get!(Email, id)
-
+  def get_email_by_userID!(id) do
+    from(c in  Email, where: [user_id: ^id])
+    |> Repo.all()
+  end
   @doc """
   Creates a email.
 

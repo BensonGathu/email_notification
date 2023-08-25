@@ -2,7 +2,7 @@
   Group <%= @group.id %>
   <:subtitle><%= @group.name %></:subtitle>
   <:actions>
-    <.link patch={~p"/groups/#{@group}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/groupcontacts/new"} phx-click={JS.push_focus()}>
       <.button>Add Member</.button>
     </.link>
   </:actions>
@@ -12,7 +12,6 @@
     </.link>
   </:actions>
 </.header>
-
 
 <.back navigate={~p"/groups"}>Back to groups</.back>
 
@@ -28,6 +27,23 @@
     title={@page_title}
     action={@live_action}
     group={@group}
+    patch={~p"/groups/#{@group}"}
+    current_user={@current_user}
+  />
+</.modal>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="group_contact-modal"
+  show
+  on_cancel={JS.patch(~p"/groups/#{@group}")}
+>
+  <.live_component
+    module={EmailNotificationWeb.GroupLive.FormComponent}
+    id={@group_contact.id || :new}
+    title={@page_title}
+    action={@live_action}
+    group_contact={@group_contact}
     patch={~p"/groups/#{@group}"}
     current_user={@current_user}
   />

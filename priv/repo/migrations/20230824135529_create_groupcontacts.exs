@@ -8,9 +8,8 @@ defmodule EmailNotification.Repo.Migrations.CreateGroupcontacts do
 
       timestamps()
     end
-    create unique_index(:groupcontacts, [:group_id, :contact_id])
 
-    create index(:groupcontacts, [:group_id])
-    create index(:groupcontacts, [:contact_id])
+
+    create index(:groupcontacts, [:contact_id, :group_id])
   end
 end

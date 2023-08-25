@@ -20,7 +20,7 @@ defmodule EmailNotification.GroupContacts do
   def list_groupcontacts do
     Repo.all(GroupContact)|>Repo.preload([:contact])
   end
-
+ 
   @doc """
   Gets a single group_contact.
 

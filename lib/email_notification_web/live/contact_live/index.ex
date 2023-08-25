@@ -6,8 +6,8 @@ defmodule EmailNotificationWeb.ContactLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    
-    {:ok, stream(socket, :contacts, Contacts.list_contacts())}
+
+    {:ok, stream(socket, :contacts, Contacts.get_contact_by_userID!(socket.assigns.current_user.id))}
   end
 
   @impl true

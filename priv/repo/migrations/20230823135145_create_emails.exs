@@ -12,7 +12,7 @@ defmodule EmailNotification.Repo.Migrations.CreateEmails do
       timestamps()
     end
 
-    create index(:emails, [:user_id])
-    create index(:emails, [:contact_id])
+
+    create index(:emails, [:contact_id, :user_id])
   end
 end

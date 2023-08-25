@@ -8,9 +8,10 @@ defmodule EmailNotification.Repo.Migrations.CreateContacts do
       add :email_address, :string
       add :user_id, references(:users, on_delete: :nothing)
 
-      timestamps() 
+      timestamps()
     end
-    create unique_index(:contacts, [:email_address])
+
+
     create index(:contacts, [:user_id,])
   end
 end

@@ -6,7 +6,7 @@ defmodule EmailNotificationWeb.GroupLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :groups, Groups.list_groups())}
+    {:ok, stream(socket, :groups, Groups.get_groups_by_userID!(socket.assigns.current_user.id))}
   end
 
   @impl true
