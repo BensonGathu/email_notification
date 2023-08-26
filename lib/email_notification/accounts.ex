@@ -156,13 +156,13 @@ defmodule EmailNotification.Accounts do
     end
   end
 
-
+  
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.update_changeset(attrs)
     |> Repo.update()
   end
-  
+
 
   defp user_email_multi(user, email, context) do
     changeset =

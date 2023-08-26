@@ -9,7 +9,7 @@ defmodule EmailNotification.Repo.Migrations.CreateUsersAuthTables do
       add :phoneNumber, :citext, null: false
       add :first_name, :citext, null: false
       add :last_name, :citext, null: false
-      add :role, {:array, :citext}, default: ["user",]
+      add :role, :citext, null: false, default: "user"
       add :plan, :citext, null: false, default: "regular"
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime

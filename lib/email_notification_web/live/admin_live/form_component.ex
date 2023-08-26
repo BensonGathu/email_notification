@@ -31,8 +31,7 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
   end
 
   defp save_user(socket, :edit, user_params) do
-    Logger.info("UPDATINGG USER")
-    Logger.info(user_params)
+
     case Accounts.update_user(socket.assigns.user, user_params) do
       {:ok, user} ->
         notify_parent({:saved, user})
@@ -48,6 +47,8 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
   end
 
   defp save_user(socket, :new, user_params) do
+    Logger.info("SAVING USER")
+    Logger.info(user_params)
     case Accounts.register_user(user_params) do
       {:ok, user} ->
         notify_parent({:saved, user})

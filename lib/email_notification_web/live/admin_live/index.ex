@@ -11,6 +11,7 @@ defmodule EmailNotificationWeb.AdminLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     # :admins, Admins.list_admins(),
+     
 
     {:ok, stream(socket, :users, Accounts.list_users())}
   end

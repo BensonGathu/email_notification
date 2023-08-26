@@ -10,7 +10,6 @@
 
 <!-- Assuming roles are atoms like :user, :admin, etc. -->
 
-
 <.table
   id="admins"
   rows={@streams.users}
@@ -22,12 +21,9 @@
   <:col :let={{_id, user}} label="Email"><%= user.email %></:col>
   <:col :let={{_id, user}} label="PhoneNumber"><%= user.phoneNumber %></:col>
   <:col :let={{_id, user}} label="Plan"><%= user.plan %></:col>
-  <:col :let={{_id, user}} label="Roles">
-    <%= for role <- user.role do %>
-      <%= role %>
-      
-    <% end %>
-  </:col>
+  <:col :let={{_id, user}} label="Role"><%= user.role %></:col>
+
+
  
   <:action :let={{_id, user}}>
     <div class="sr-only">

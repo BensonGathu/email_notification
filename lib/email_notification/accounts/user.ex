@@ -7,7 +7,7 @@ defmodule EmailNotification.Accounts.User do
     field :phoneNumber, :string
     field :first_name
     field :last_name
-    field :role, {:array, Ecto.Enum}, values: [:user, :admin, :superuser]
+    field :role, Ecto.Enum, values: [:user, :admin, :superuser]
     field :plan, Ecto.Enum, values: [:regular, :gold]
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -42,6 +42,15 @@ defmodule EmailNotification.Accounts.User do
       submitting the form), this option can be set to `false`.
       Defaults to `true`.
   """
+
+
+ 
+  def update_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email,  :phoneNumber, :role, :plan, :first_name, :last_name])
+
+  end
+
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :phoneNumber, :role, :plan, :first_name, :last_name])

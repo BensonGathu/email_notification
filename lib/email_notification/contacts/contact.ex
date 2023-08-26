@@ -22,4 +22,4 @@ defmodule EmailNotification.Contacts.Contact do
     |> unique_constraint([:user_id, :email_address])
 
   end
-end
+end 
