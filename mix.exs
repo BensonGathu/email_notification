@@ -51,7 +51,8 @@ defmodule EmailNotification.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:bamboo, "~> 2.0"}
+      {:bamboo, "~> 2.0"},
+      {:phoenix_multi_select, "~> 0.1"},
     ]
   end
 

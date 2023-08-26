@@ -19,6 +19,7 @@
     <.input field={@form[:role]} type="select" label="Role" options={Ecto.Enum.values(EmailNotification.Accounts.User, :role)}/>
      <.input field={@form[:plan]} type="select" label="Plan"  options={Ecto.Enum.values(EmailNotification.Accounts.User, :plan)}/>
 
+
     <:actions>
       <.button phx-disable-with="Saving...">Save Admin</.button>
     </:actions>
