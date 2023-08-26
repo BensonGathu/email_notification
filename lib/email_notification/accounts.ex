@@ -4,6 +4,7 @@ defmodule EmailNotification.Accounts do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias EmailNotification.Repo
 
   alias EmailNotification.Accounts.{User, UserToken, UserNotifier}
@@ -22,10 +23,19 @@ defmodule EmailNotification.Accounts do
       nil
 
   """
+  def list_users do
+    Repo.all(User)
+  end
+
+
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
   end
 
+  def delete_user(%User{} = user) do
+    Logger.info("DELETING USER")
+    Repo.delete(user)
+  end
   @doc """
   Gets a user by email and password.
 
@@ -145,6 +155,14 @@ defmodule EmailNotification.Accounts do
       _ -> :error
     end
   end
+
+
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+  
 
   defp user_email_multi(user, email, context) do
     changeset =

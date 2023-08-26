@@ -7,6 +7,8 @@ defmodule EmailNotification.Repo.Migrations.CreateUsersAuthTables do
     create table(:users) do
       add :email, :citext, null: false
       add :phoneNumber, :citext, null: false
+      add :first_name, :citext, null: false
+      add :last_name, :citext, null: false
       add :role, {:array, :citext}, default: ["user",]
       add :plan, :citext, null: false, default: "regular"
       add :hashed_password, :string, null: false
@@ -14,7 +16,7 @@ defmodule EmailNotification.Repo.Migrations.CreateUsersAuthTables do
       timestamps()
     end
 
-    create unique_index(:users, [:email,:phoneNumber]) 
+    create unique_index(:users, [:email,:phoneNumber])
 
     create table(:users_tokens) do
       add :user_id, references(:users, on_delete: :delete_all), null: false

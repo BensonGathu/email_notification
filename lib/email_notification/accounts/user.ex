@@ -5,6 +5,8 @@ defmodule EmailNotification.Accounts.User do
   schema "users" do
     field :email, :string
     field :phoneNumber, :string
+    field :first_name
+    field :last_name
     field :role, {:array, Ecto.Enum}, values: [:user, :admin, :superuser]
     field :plan, Ecto.Enum, values: [:regular, :gold]
     field :password, :string, virtual: true, redact: true
@@ -42,7 +44,7 @@ defmodule EmailNotification.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :phoneNumber, :role, :plan])
+    |> cast(attrs, [:email, :password, :phoneNumber, :role, :plan, :first_name, :last_name])
     |> validate_email(opts)
     |> validate_password(opts)
   end

@@ -13,7 +13,7 @@ defmodule EmailNotification.EmailSender do
   end
 
   def send_email(email) do
-    MyApp.Mailer.deliver(email)
+    EmailNotification.Mailer.deliver(email)
   end
 
   def send_email_with_params(subject, body, contact_email) do

@@ -1,12 +1,18 @@
 defmodule EmailNotificationWeb.AdminLive.Index do
+
+  require Logger
   use EmailNotificationWeb, :live_view
 
   alias EmailNotification.Admins
   alias EmailNotification.Admins.Admin
+  alias EmailNotification.Accounts
+  alias EmailNotification.Accounts.User
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :admins, Admins.list_admins())}
+    # :admins, Admins.list_admins(),
+
+    {:ok, stream(socket, :users, Accounts.list_users())}
   end
 
   @impl true
@@ -16,32 +22,32 @@ defmodule EmailNotificationWeb.AdminLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Admin")
-    |> assign(:admin, Admins.get_admin!(id))
+    |> assign(:page_title, "Edit User")
+    |> assign(:user, Accounts.get_user!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Admin")
-    |> assign(:admin, %Admin{})
+    |> assign(:user, %User{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Listing Admins")
-    |> assign(:admin, nil)
+    |> assign(:user, nil)
   end
 
   @impl true
-  def handle_info({EmailNotificationWeb.AdminLive.FormComponent, {:saved, admin}}, socket) do
-    {:noreply, stream_insert(socket, :admins, admin)}
+  def handle_info({EmailNotificationWeb.AdminLive.FormComponent, {:saved, user}}, socket) do
+    {:noreply, stream_insert(socket, :users, user)}
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    admin = Admins.get_admin!(id)
-    {:ok, _} = Admins.delete_admin(admin)
+    user = Accounts.get_user!(id)
+    {:ok, _} = Accounts.delete_user(user)
 
-    {:noreply, stream_delete(socket, :admins, admin)}
+    {:noreply, stream_delete(socket, :users, user)}
   end
 end

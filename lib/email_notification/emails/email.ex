@@ -9,9 +9,9 @@ defmodule EmailNotification.Emails.Email do
     belongs_to :user, EmailNotification.Accounts.User
     belongs_to :contact, EmailNotification.Contacts.Contact
 
-    timestamps()
+    timestamps() 
   end
- 
+
   @doc false
   def changeset(email, attrs) do
     email

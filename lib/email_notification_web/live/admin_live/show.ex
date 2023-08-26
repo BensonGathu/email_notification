@@ -2,10 +2,14 @@ defmodule EmailNotificationWeb.AdminLive.Show do
   use EmailNotificationWeb, :live_view
 
   alias EmailNotification.Admins
+  alias EmailNotification.Accounts
+  alias EmailNotification.Emails
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    # Mount a user and the emails
+
+    {:ok, stream(socket, :emails, Emails.get_email_by_userID!(_params["id"]))}
   end
 
   @impl true
@@ -13,7 +17,8 @@ defmodule EmailNotificationWeb.AdminLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:admin, Admins.get_admin!(id))}
+     |> assign(:user, Accounts.get_user!(id))}
+
   end
 
   defp page_title(:show), do: "Show Admin"

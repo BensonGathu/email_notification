@@ -5,7 +5,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
 
   alias EmailNotification.Emails
   alias EmailNotification.Contacts
-  alias EmailNotification.EmailSender 
+  alias EmailNotification.EmailSender
 
 
 
@@ -37,7 +37,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
 
     email_params_with_user =
       Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
-      EmailSender.send_email(email)
+      # EmailSender.send_email(email_params_with_user)
     save_email(socket, socket.assigns.action, email_params_with_user)
   end
 

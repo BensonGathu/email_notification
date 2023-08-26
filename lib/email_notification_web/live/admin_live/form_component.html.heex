@@ -1,0 +1,26 @@
+<div>
+  <.header>
+    <%= @title %>
+    <:subtitle>Use this form to manage admin records in your database.</:subtitle>
+  </.header>
+
+  <.simple_form
+    for={@form}
+    id="admin-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input field={@form[:first_name]} type="text" label="FirstName" />
+    <.input field={@form[:last_name]} type="text" label="LastName" />
+    <.input field={@form[:phoneNumber]} type="text" label="PhoneNumber" />
+    <.input field={@form[:email]} type="text" label="Email" />
+    
+    <.input field={@form[:role]} type="select" label="Role" options={Ecto.Enum.values(EmailNotification.Accounts.User, :role)}/>
+     <.input field={@form[:plan]} type="select" label="Plan"  options={Ecto.Enum.values(EmailNotification.Accounts.User, :plan)}/>
+
+    <:actions>
+      <.button phx-disable-with="Saving...">Save Admin</.button>
+    </:actions>
+  </.simple_form>
+</div>

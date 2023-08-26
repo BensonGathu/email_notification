@@ -1,41 +1,63 @@
 <.header>
-  Listing Admins
+  Users
   <:actions>
     <.link patch={~p"/admins/new"}>
-      <.button>New Admin</.button>
+      <.button>Add User</.button>
     </.link>
   </:actions>
 </.header>
 
+
+<!-- Assuming roles are atoms like :user, :admin, etc. -->
+
+
 <.table
   id="admins"
-  rows={@streams.admins}
-  row_click={fn {_id, admin} -> JS.navigate(~p"/admins/#{admin}") end}
+  rows={@streams.users}
+  row_click={fn {_id, user} -> JS.navigate(~p"/admins/#{user}") end}
 >
-  <:col :let={{_id, admin}} label="Admin role"><%= admin.admin_role %></:col>
-  <:action :let={{_id, admin}}>
+ <:col :let={{_id, user}} label="FirstName"><%= user.first_name %> </:col>
+  <:col :let={{_id, user}} label="LastName"><%= user.last_name %></:col>
+
+  <:col :let={{_id, user}} label="Email"><%= user.email %></:col>
+  <:col :let={{_id, user}} label="PhoneNumber"><%= user.phoneNumber %></:col>
+  <:col :let={{_id, user}} label="Plan"><%= user.plan %></:col>
+  <:col :let={{_id, user}} label="Roles">
+    <%= for role <- user.role do %>
+      <%= role %>
+      
+    <% end %>
+  </:col>
+ 
+  <:action :let={{_id, user}}>
     <div class="sr-only">
-      <.link navigate={~p"/admins/#{admin}"}>Show</.link>
+      <.link navigate={~p"/admins/#{user}"}>Show</.link>
     </div>
-    <.link patch={~p"/admins/#{admin}/edit"}>Edit</.link>
+    <.link patch={~p"/admins/#{user}/edit"}>Edit</.link>
   </:action>
-  <:action :let={{id, admin}}>
+  <:action :let={{id, user}}> 
     <.link
-      phx-click={JS.push("delete", value: %{id: admin.id}) |> hide("##{id}")}
+      phx-click={JS.push("delete", value: %{id: user.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
       Delete
-    </.link>
+    </.link> 
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="admin-modal" show on_cancel={JS.patch(~p"/admins")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="admin-modal"
+  show 
+  on_cancel={JS.patch(~p"/admins")}
+>
   <.live_component
     module={EmailNotificationWeb.AdminLive.FormComponent}
-    id={@admin.id || :new}
+    id={@user.id || :new}
     title={@page_title}
     action={@live_action}
-    admin={@admin}
+    current_user={@current_user} 
+    user={@user}
     patch={~p"/admins"}
   />
 </.modal>

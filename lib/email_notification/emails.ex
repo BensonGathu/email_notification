@@ -76,6 +76,7 @@ defmodule EmailNotification.Emails do
     |> Email.changeset(attrs)
     |> Repo.update()
   end
+  
 
   @doc """
   Deletes a email.

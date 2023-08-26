@@ -36,7 +36,7 @@ defmodule EmailNotification.Contacts do
 
   """
   def get_contact!(id), do: Repo.get!(Contact, id)
- 
+
   def get_contact_by_userID!(id) do
     from(c in  Contact, where: [user_id: ^id])
     |> Repo.all()
@@ -76,7 +76,7 @@ defmodule EmailNotification.Contacts do
     contact
     |> Contact.changeset(attrs)
     |> Repo.update()
-  end
+  end 
 
   @doc """
   Deletes a contact.

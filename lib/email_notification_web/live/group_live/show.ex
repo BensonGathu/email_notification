@@ -9,7 +9,7 @@ defmodule EmailNotificationWeb.GroupLive.Show do
   def mount(params, _session, socket) do
     {:ok, stream(socket, :members, GroupContacts.get_group_contact_by_groupID!(params["id"]))}
   end
-
+ 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     {:noreply,

@@ -1,36 +1,13 @@
 defmodule EmailNotificationWeb.AdminLive.FormComponent do
+  require Logger
   use EmailNotificationWeb, :live_component
 
   alias EmailNotification.Admins
+  alias EmailNotification.Accounts
 
   @impl true
-  def render(assigns) do
-    ~H"""
-    <div>
-      <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage admin records in your database.</:subtitle>
-      </.header>
-
-      <.simple_form
-        for={@form}
-        id="admin-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:admin_role]} type="text" label="Admin role" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Admin</.button>
-        </:actions>
-      </.simple_form>
-    </div>
-    """
-  end
-
-  @impl true
-  def update(%{admin: admin} = assigns, socket) do
-    changeset = Admins.change_admin(admin)
+  def update(%{user: user} = assigns, socket) do
+    changeset = Accounts.change_user_registration(user)
 
     {:ok,
      socket
@@ -39,27 +16,30 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"admin" => admin_params}, socket) do
+  def handle_event("validate", %{"user" => user_params}, socket) do
     changeset =
-      socket.assigns.admin
-      |> Admins.change_admin(admin_params)
+      socket.assigns.user
+      |> Accounts.change_user_registration(user_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"admin" => admin_params}, socket) do
-    save_admin(socket, socket.assigns.action, admin_params)
+  def handle_event("save", %{"user" => user_params}, socket) do
+
+    save_user(socket, socket.assigns.action, user_params)
   end
 
-  defp save_admin(socket, :edit, admin_params) do
-    case Admins.update_admin(socket.assigns.admin, admin_params) do
-      {:ok, admin} ->
-        notify_parent({:saved, admin})
+  defp save_user(socket, :edit, user_params) do
+    Logger.info("UPDATINGG USER")
+    Logger.info(user_params)
+    case Accounts.update_user(socket.assigns.user, user_params) do
+      {:ok, user} ->
+        notify_parent({:saved, user})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Admin updated successfully")
+         |> put_flash(:info, "User updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -67,10 +47,10 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
     end
   end
 
-  defp save_admin(socket, :new, admin_params) do
-    case Admins.create_admin(admin_params) do
-      {:ok, admin} ->
-        notify_parent({:saved, admin})
+  defp save_user(socket, :new, user_params) do
+    case Accounts.register_user(user_params) do
+      {:ok, user} ->
+        notify_parent({:saved, user})
 
         {:noreply,
          socket
@@ -81,6 +61,50 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
         {:noreply, assign_form(socket, changeset)}
     end
   end
+
+  # @impl true
+  # def handle_event("validate", %{"admin" => admin_params}, socket) do
+  #   changeset =
+  #     socket.assigns.admin
+  #     |> Admins.change_admin(admin_params)
+  #     |> Map.put(:action, :validate)
+
+  #   {:noreply, assign_form(socket, changeset)}
+  # end
+
+  # def handle_event("save", %{"user" => admin_params}, socket) do
+  #   save_admin(socket, socket.assigns.action, admin_params)
+  # end
+
+  # defp save_admin(socket, :edit, admin_params) do
+  #   case Admins.update_admin(socket.assigns.admin, admin_params) do
+  #     {:ok, admin} ->
+  #       notify_parent({:saved, admin})
+
+  #       {:noreply,
+  #        socket
+  #        |> put_flash(:info, "Admin updated successfully")
+  #        |> push_patch(to: socket.assigns.patch)}
+
+  #     {:error, %Ecto.Changeset{} = changeset} ->
+  #       {:noreply, assign_form(socket, changeset)}
+  #   end
+  # end
+
+  # defp save_admin(socket, :new, admin_params) do
+  #   case Admins.create_admin(admin_params) do
+  #     {:ok, admin} ->
+  #       notify_parent({:saved, admin})
+
+  #       {:noreply,
+  #        socket
+  #        |> put_flash(:info, "Admin created successfully")
+  #        |> push_patch(to: socket.assigns.patch)}
+
+  #     {:error, %Ecto.Changeset{} = changeset} ->
+  #       {:noreply, assign_form(socket, changeset)}
+  #   end
+  # end
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
