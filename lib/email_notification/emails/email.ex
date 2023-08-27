@@ -19,3 +19,4 @@ defmodule EmailNotification.Emails.Email do
     |> validate_required([:subject, :body, :status, :user_id ])
   end
 end
+ 

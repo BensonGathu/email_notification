@@ -11,12 +11,16 @@ defmodule EmailNotification.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
- 
+
     belongs_to :role, EmailNotification.Roles.Role
 
     has_many :contacts, EmailNotification.Contacts.Contact
     has_many :emails, EmailNotification.Emails.Email
     has_many :groups, EmailNotification.Groups.Group
+    has_many :admin_links, EmailNotification.Admins.AdminLink, foreign_key: :admin_id
+ 
+    has_many :users_managed, through: [:admin_links, :user]
+
     timestamps()
   end
 
