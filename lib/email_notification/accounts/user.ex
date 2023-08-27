@@ -7,11 +7,12 @@ defmodule EmailNotification.Accounts.User do
     field :phoneNumber, :string
     field :first_name
     field :last_name
-    field :role, Ecto.Enum, values: [:user, :admin, :superuser]
     field :plan, Ecto.Enum, values: [:regular, :gold]
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+ 
+    belongs_to :role, EmailNotification.Roles.Role
 
     has_many :contacts, EmailNotification.Contacts.Contact
     has_many :emails, EmailNotification.Emails.Email
@@ -44,16 +45,16 @@ defmodule EmailNotification.Accounts.User do
   """
 
 
- 
+
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email,  :phoneNumber, :role, :plan, :first_name, :last_name])
+    |> cast(attrs, [:email,  :phoneNumber, :role_id, :plan, :first_name, :last_name])
 
   end
 
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :phoneNumber, :role, :plan, :first_name, :last_name])
+    |> cast(attrs, [:email, :password, :phoneNumber, :role_id, :plan, :first_name, :last_name])
     |> validate_email(opts)
     |> validate_password(opts)
   end

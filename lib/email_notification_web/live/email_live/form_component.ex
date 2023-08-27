@@ -6,6 +6,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   alias EmailNotification.Emails
   alias EmailNotification.Contacts
   alias EmailNotification.EmailSender
+  alias EmailNotification.Groups
 
 
 
@@ -14,11 +15,13 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
     current_user = assigns.current_user
     changeset = Emails.change_email(email)
     contact = Contacts.get_contact_by_userID!(current_user.id)
+    group = Groups.get_groups_by_userID!(current_user.id)
 
     {:ok,
      socket
      |> assign(assigns)
      |> assign(:contacts, contact)
+     |> assign(:groups, group)
      |> assign_form(changeset)}
   end
 

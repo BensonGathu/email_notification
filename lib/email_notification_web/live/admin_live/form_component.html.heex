@@ -15,14 +15,27 @@
     <.input field={@form[:last_name]} type="text" label="LastName" />
     <.input field={@form[:phoneNumber]} type="text" label="PhoneNumber" />
     <.input field={@form[:email]} type="text" label="Email" />
-<!--     <.input field={@form[:password]} type="password" label="Password" /> -->
-    <.input field={@form[:role]} type="select" label="Role" options={Ecto.Enum.values(EmailNotification.Accounts.User, :role)}/>
-     <.input field={@form[:plan]} type="select" label="Plan"  options={Ecto.Enum.values(EmailNotification.Accounts.User, :plan)}/>
+    <!--     <.input field={@form[:password]} type="password" label="Password" /> -->
+ 
+ <.input
+      field={@form[:role_id]}
+      type="select"
+      label="Role"
+      options={Enum.map(@roles, fn role ->{role.name, role.id} end)}
+    /> 
 
+
+    
+
+    <.input
+      field={@form[:plan]}
+      type="select"
+      label="Plan"
+      options={Ecto.Enum.values(EmailNotification.Accounts.User, :plan)}
+    />
 
     <:actions>
       <.button phx-disable-with="Saving...">Save User</.button>
     </:actions>
   </.simple_form>
 </div>
-  

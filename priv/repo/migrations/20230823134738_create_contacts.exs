@@ -13,5 +13,5 @@ defmodule EmailNotification.Repo.Migrations.CreateContacts do
     create unique_index(:contacts, [:user_id, :email_address])
 
     create index(:contacts, [:user_id,])
-  end
+  end 
 end

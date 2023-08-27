@@ -40,6 +40,7 @@ defmodule EmailNotification.Emails do
     from(c in  Email, where: [user_id: ^id])
     |> Repo.all()
     |> Repo.preload(:contact)
+    |> Repo.preload(:group)
   end
   @doc """
   Creates a email.
@@ -76,7 +77,7 @@ defmodule EmailNotification.Emails do
     |> Email.changeset(attrs)
     |> Repo.update()
   end
-  
+
 
   @doc """
   Deletes a email.

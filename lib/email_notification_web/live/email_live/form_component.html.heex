@@ -6,17 +6,21 @@
 
   <.simple_form
     for={@form}
-    id="email-form"
+    id="email-form"  
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save"
   >
     <.input field={@form[:subject]} type="text" label="Subject" />
     <.input field={@form[:body]} type="text" label="Body" />
+    
     <.input field={@form[:contact_id]} type="select" label="Contact" options={Enum.map(@contacts, fn contact ->{contact.email_address, contact.id} end )}/>
+
+    <.input field={@form[:group_id]} type="select" label="Group" options={Enum.map(@groups, fn group ->{group.name, group.id} end )}/>
 
     <:actions>
       <.button phx-disable-with="Saving...">Send Email</.button>
     </:actions>
   </.simple_form>
 </div>
+ 

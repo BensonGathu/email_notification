@@ -7,12 +7,14 @@ defmodule EmailNotificationWeb.AdminLive.Index do
   alias EmailNotification.Admins.Admin
   alias EmailNotification.Accounts
   alias EmailNotification.Accounts.User
+  alias EmailNotification.Roles.Role
+  alias EmailNotification.Roles
 
   @impl true
   def mount(_params, _session, socket) do
     # :admins, Admins.list_admins(),
-     
 
+    # socket = socket |> assign(:roles, Roles.list_roles())
     {:ok, stream(socket, :users, Accounts.list_users())}
   end
 

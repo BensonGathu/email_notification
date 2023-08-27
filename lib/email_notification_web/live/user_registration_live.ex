@@ -1,4 +1,5 @@
 defmodule EmailNotificationWeb.UserRegistrationLive do
+  require Logger
   use EmailNotificationWeb, :live_view
 
   alias EmailNotification.Accounts
@@ -19,7 +20,11 @@ defmodule EmailNotificationWeb.UserRegistrationLive do
 
   def handle_event("save", %{"user" => user_params}, socket) do
     # add data(role,accountType) to user params
-    case Accounts.register_user(user_params) do
+
+
+    user_params_with_role = Map.put(user_params, "role_id", 2)
+    Logger.info(user_params_with_role)
+    case Accounts.register_user(user_params_with_role) do
       {:ok, user} ->
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(

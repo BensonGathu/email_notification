@@ -4,14 +4,16 @@ defmodule EmailNotificationWeb.AdminLive.FormComponent do
 
   alias EmailNotification.Admins
   alias EmailNotification.Accounts
+  alias EmailNotification.Roles
 
   @impl true
   def update(%{user: user} = assigns, socket) do
     changeset = Accounts.change_user_registration(user)
-
+    role =  Roles.list_roles()
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:roles, role)
      |> assign_form(changeset)}
   end
 

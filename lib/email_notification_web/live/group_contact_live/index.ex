@@ -9,7 +9,7 @@ defmodule EmailNotificationWeb.GroupContactLive.Index do
   def mount(_params, _session, socket) do
     group_id = _params["id"]
 
-    socket = socket |> assign(:group_id, group_id)
+    socket = socket |> assign(:group_id, group_id) 
     {:ok, stream(socket, :groupcontacts, GroupContacts.list_groupcontacts())}
   end
 

@@ -12,7 +12,7 @@ defmodule EmailNotification.Contacts.Contact do
     belongs_to :user, EmailNotification.Accounts.User
 
     timestamps()
-  end
+  end 
 
   @doc false
   def changeset(contact, attrs) do
@@ -22,4 +22,4 @@ defmodule EmailNotification.Contacts.Contact do
     |> unique_constraint([:user_id, :email_address])
 
   end
-end 
+end

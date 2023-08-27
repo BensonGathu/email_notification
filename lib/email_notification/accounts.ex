@@ -24,18 +24,30 @@ defmodule EmailNotification.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all(User) |> Repo.preload(:role)
   end
 
+  # def get_groups_by_userID!(id) do
+  #   from(c in  Group, where: [user_id: ^id])
+  #   |> Repo.all()
+  # end
+
+  # def list_normalUsers do
+  #   from( c in User, where: [role_id: ^2])
+  #   |> Repo.all()
+  # end
+
+  def list(admins) do
+  end
 
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
   end
 
   def delete_user(%User{} = user) do
-    Logger.info("DELETING USER")
     Repo.delete(user)
   end
+
   @doc """
   Gets a user by email and password.
 
@@ -156,13 +168,11 @@ defmodule EmailNotification.Accounts do
     end
   end
 
-  
   def update_user(%User{} = user, attrs) do
     user
     |> User.update_changeset(attrs)
     |> Repo.update()
   end
-
 
   defp user_email_multi(user, email, context) do
     changeset =
