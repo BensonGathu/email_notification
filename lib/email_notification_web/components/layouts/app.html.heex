@@ -25,7 +25,7 @@
             Emails
           </p>
         </a>
-        <%= if @current_user.role == "admin" do %>
+        <%= if @current_user.role.name == "admin" do %>
           <a href="/admins">
             <p class="bg-brand/5  rounded-full px-2 font-medium leading-6">
               Admin Section

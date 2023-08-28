@@ -12,14 +12,14 @@
   rows={@streams.emails}
   row_click={fn {_id, email} -> JS.navigate(~p"/emails/#{email}") end}
 >
-  <:col :let={{_id, email}} label="Recipient"><%= email.contact.email_address %></:col>
+  <:col :let={{_id, email}} label="Recipient"><%= email.contact.email_address %></:col> 
   <:col :let={{_id, email}} label="Subject"><%= email.subject %></:col>
   <:col :let={{_id, email}} label="Body"><%= email.body %></:col>
   <:col :let={{_id, email}} label="Status"><%= email.status %></:col>
   <:action :let={{_id, email}}>
     <div class="sr-only">
       <.link navigate={~p"/emails/#{email}"}>Show</.link>
-    </div>
+    </div> 
     <.link patch={~p"/emails/#{email}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, email}}>

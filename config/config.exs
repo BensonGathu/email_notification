@@ -29,12 +29,13 @@ config :email_notification, EmailNotificationWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :email_notification, EmailNotification.Mailer, adapter: Swoosh.Adapters.Local
 # Configure Bamboo email sender
+
 config :email_notification, MyApp.Mailer,
   adapter: Bamboo.SMTPAdapter,
-  server: "smtp.example.com",
+  server: "smtp.gmail.com",
   port: 587,
-  username: "your_username",
-  password: "your_password",
+  username: "",
+  password: "ohmawjghuhuzpxji",
   tls: :always,
   retries: 2
 

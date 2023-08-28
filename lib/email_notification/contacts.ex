@@ -18,7 +18,7 @@ defmodule EmailNotification.Contacts do
 
   """
   def list_contacts do
-    Repo.all(Contact)
+    Repo.all(Contact)  |> Repo.preload(:user)
   end
 
   @doc """
@@ -35,11 +35,19 @@ defmodule EmailNotification.Contacts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_contact!(id), do: Repo.get!(Contact, id)
+  def get_contact!(id), do: Repo.get!(Contact, id) |> Repo.preload(:user)
 
   def get_contact_by_userID!(id) do
     from(c in  Contact, where: [user_id: ^id])
-    |> Repo.all()
+    |> Repo.all() |> Repo.preload(:user)
+  end
+
+
+  def get_contact_email!(id) do
+    query =
+      from(c in Contact, where: c.id == ^id, select: c.email_address)
+
+    Repo.one!(query)
   end
 
   @doc """
@@ -76,7 +84,7 @@ defmodule EmailNotification.Contacts do
     contact
     |> Contact.changeset(attrs)
     |> Repo.update()
-  end 
+  end
 
   @doc """
   Deletes a contact.

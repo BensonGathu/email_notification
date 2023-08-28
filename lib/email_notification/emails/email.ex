@@ -15,8 +15,7 @@ defmodule EmailNotification.Emails.Email do
   @doc false
   def changeset(email, attrs) do
     email
-    |> cast(attrs, [:subject, :body, :status, :user_id, :contact_id,:group_id])
+    |> cast(attrs, [:subject, :body, :status, :user_id, :contact_id, :group_id])
     |> validate_required([:subject, :body, :status, :user_id ])
   end
 end
- 

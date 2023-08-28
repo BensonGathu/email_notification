@@ -8,8 +8,6 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   alias EmailNotification.EmailSender
   alias EmailNotification.Groups
 
-
-
   @impl true
   def update(%{email: email} = assigns, socket) do
     current_user = assigns.current_user
@@ -35,6 +33,30 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
     {:noreply, assign_form(socket, changeset)}
   end
 
+  # def handle_event("save", %{"email" => email_params} = params, socket) do
+  #   current_user = socket.assigns.current_user
+
+  #   {body, subject, contact_email} = extract_values(email_params)
+
+  #   email_params_with_user =
+  #     Map.put(email_params, "user_id", current_user.id)
+
+  #   case EmailSender.send_email_with_params(subject, body, contact_email) do
+  #     :ok ->
+  #       email_params_with_status = Map.put(email_params_with_user, "status", "Success")
+  #       save_email(socket, socket.assigns.action, email_params_with_status)
+  #       {:noreply, socket}
+
+  #     {:error, reason} ->
+  #       email_params_with_status = Map.put(email_params_with_user, "status", "Failed")
+  #       save_email(socket, socket.assigns.action, email_params_with_status)
+  #       Logger.error("Email sending failed: #{reason}")
+  #       {:noreply, assign(socket, error: "Email sending failed, please try again")}
+  #   end
+  # end
+
+
+
   def handle_event("save", %{"email" => email_params} = params, socket) do
     current_user = socket.assigns.current_user
 
@@ -42,6 +64,25 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
       Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
       # EmailSender.send_email(email_params_with_user)
     save_email(socket, socket.assigns.action, email_params_with_user)
+  end
+  
+  def extract_values(data) do
+    {body, subject, contact_email} =
+      Enum.reduce(data, {nil, nil, nil}, fn
+        {"body", value}, {_, subject, contact_email} ->
+          {value, subject, contact_email}
+
+        {"subject", value}, {body, _, contact_email} ->
+          {body, value, contact_email}
+
+        {"contact_id", contact_id}, {body, subject, _} ->
+          {body, subject, Contacts.get_contact_email!(contact_id)}
+
+        _, acc ->
+          acc
+      end)
+
+    {body, subject, contact_email}
   end
 
   defp save_email(socket, :edit, email_params) do

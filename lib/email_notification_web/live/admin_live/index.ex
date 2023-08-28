@@ -11,11 +11,13 @@ defmodule EmailNotificationWeb.AdminLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    # :admins, Admins.list_admins(),
 
-    # socket = socket |> assign(:roles, Roles.list_roles())
-    {:ok, stream(socket, :users, Accounts.list_users())}
+    users = Accounts.list_users()
+    filtered_users = Enum.reject(users, fn user -> user.id == socket.assigns.current_user.id end)
+
+    {:ok, stream(socket, :users, filtered_users)}
   end
+
 
   @impl true
   def handle_params(params, _url, socket) do
