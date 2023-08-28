@@ -8,7 +8,7 @@ alias EmailNotification.Roles.Role
 alias EmailNotification.Groups.Group
 
 def list_roles do
-  Repo.all(Role)
+  Repo.all(Role) 
 end
 
 

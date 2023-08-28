@@ -15,9 +15,10 @@
     <.input field={@form[:body]} type="text" label="Body" />
     
     <.input field={@form[:contact_id]} type="select" label="Contact" options={Enum.map(@contacts, fn contact ->{contact.email_address, contact.id} end )}/>
+<%= if @current_user.plan == :gold do %>
 
     <.input field={@form[:group_id]} type="select" label="Group" options={Enum.map(@groups, fn group ->{group.name, group.id} end )}/>
-
+<% end%>
     <:actions>
       <.button phx-disable-with="Saving...">Send Email</.button>
     </:actions>

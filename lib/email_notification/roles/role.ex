@@ -5,11 +5,11 @@ defmodule EmailNotification.Roles.Role do
   schema "roles" do
     field :name, :string
     field :permissions, {:array, :string}
-    
+
     has_many :users, EmailNotification.Accounts.User
 
 
-    timestamps()
+    timestamps() 
   end
 
   @doc false

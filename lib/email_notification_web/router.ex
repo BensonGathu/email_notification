@@ -17,10 +17,14 @@ defmodule EmailNotificationWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :require_admin do
+    plug EmailNotificationWeb.RequireAdminRole
+  end
+
   scope "/", EmailNotificationWeb do
     pipe_through :browser
 
-    live "/", HomeLive.Index, :index
+    # live "/", HomeLive.Index, :index
     # User Routes
     # live "/users", UserLive.Index, :index
     # live "/users/new", UserLive.Index, :new
@@ -74,7 +78,7 @@ defmodule EmailNotificationWeb.Router do
       on_mount: [{EmailNotificationWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-
+      live "/", HomeLive.Index, :index
       # Contacts Routes
       live "/contacts", ContactLive.Index, :index
       live "/contacts/new", ContactLive.Index, :new
@@ -98,15 +102,14 @@ defmodule EmailNotificationWeb.Router do
       # CUSTOM GROUP CONTACTS ROUTES
       live "/groups/:id/groupcontacts/new", GroupContactLive.Index, :new
 
+      # # Admin Routes
+      # live "/admins", AdminLive.Index, :index
+      # live "/admins/new", AdminLive.Index, :new
+      # live "/admins/:id/edit", AdminLive.Index, :edit
+      # live "/admins/:id", AdminLive.Show, :show
+      # live "/admins/:id/show/edit", AdminLive.Show, :edit
 
-      # Admin Routes 
-      live "/admins", AdminLive.Index, :index
-      live "/admins/new", AdminLive.Index, :new
-      live "/admins/:id/edit", AdminLive.Index, :edit
-      live "/admins/:id", AdminLive.Show, :show
-      live "/admins/:id/show/edit", AdminLive.Show, :edit
-
-        # GROUP CONTACTS ROUTES
+      # GROUP CONTACTS ROUTES
       live "/groupcontacts", GroupContactLive.Index, :index
       # live "/groupcontacts/new", GroupContactLive.Index, :new
       live "/groupcontacts/:id/edit", GroupContactLive.Index, :edit
@@ -115,6 +118,25 @@ defmodule EmailNotificationWeb.Router do
       live "/groupcontacts/:id/show/edit", GroupContactLive.Show, :edit
     end
   end
+
+
+
+
+  scope "/", EmailNotificationWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_admin]
+
+    live_session :require_authenticated_user_admin,
+      on_mount: [{EmailNotificationWeb.UserAuth, :ensure_authenticated}] do
+      live "/admins", AdminLive.Index, :index
+      live "/admins/new", AdminLive.Index, :new
+      live "/admins/:id/edit", AdminLive.Index, :edit
+      live "/admins/:id", AdminLive.Show, :show
+      live "/admins/:id/show/edit", AdminLive.Show, :edit
+    end
+  end
+
+
+
 
   scope "/", EmailNotificationWeb do
     pipe_through [:browser]

@@ -29,7 +29,7 @@ defmodule EmailNotificationWeb.ContactLive.FormComponent do
     # add params(user_id) to contact_params
     current_user = socket.assigns.current_user
     contact_params_with_user = Map.put(contact_params, "user_id", current_user.id)
-    
+
     save_contact(socket, socket.assigns.action, contact_params_with_user)
   end
 
@@ -48,6 +48,7 @@ defmodule EmailNotificationWeb.ContactLive.FormComponent do
         {:noreply, assign_form(socket, changeset)}
     end
   end
+  
 
   defp save_contact(socket, :new, contact_params) do
     case Contacts.create_contact(contact_params) do

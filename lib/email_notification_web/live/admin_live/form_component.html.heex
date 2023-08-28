@@ -15,7 +15,7 @@
     <.input field={@form[:last_name]} type="text" label="LastName" />
     <.input field={@form[:phoneNumber]} type="text" label="PhoneNumber" />
     <.input field={@form[:email]} type="text" label="Email" />
-    <!--     <.input field={@form[:password]} type="password" label="Password" /> -->
+    <.input field={@form[:password]} type="password" label="Password" /> 
  
  <.input
       field={@form[:role_id]}
@@ -23,10 +23,6 @@
       label="Role"
       options={Enum.map(@roles, fn role ->{role.name, role.id} end)}
     /> 
-
-
-    
-
     <.input
       field={@form[:plan]}
       type="select"

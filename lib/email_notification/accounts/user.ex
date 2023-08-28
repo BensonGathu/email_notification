@@ -18,12 +18,12 @@ defmodule EmailNotification.Accounts.User do
     has_many :emails, EmailNotification.Emails.Email
     has_many :groups, EmailNotification.Groups.Group
     has_many :admin_links, EmailNotification.Admins.AdminLink, foreign_key: :admin_id
- 
+
     has_many :users_managed, through: [:admin_links, :user]
 
     timestamps()
   end
-
+ 
   @doc """
   A user changeset for registration.
 

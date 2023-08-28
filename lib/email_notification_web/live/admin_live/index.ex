@@ -1,5 +1,4 @@
 defmodule EmailNotificationWeb.AdminLive.Index do
-
   require Logger
   use EmailNotificationWeb, :live_view
 
@@ -52,5 +51,24 @@ defmodule EmailNotificationWeb.AdminLive.Index do
     {:ok, _} = Accounts.delete_user(user)
 
     {:noreply, stream_delete(socket, :users, user)}
+  end
+
+  @impl true
+  def handle_event("makeAdmin", %{"id" => id}, socket) do
+    user = Accounts.get_user!(id)
+
+
+    {:ok, _} = Accounts.make_admin(user, %{"role_id" => 1})
+
+    {:noreply, stream_insert(socket, :users, user)}
+  end
+
+  @impl true
+  def handle_event("revokeAdmin", %{"id" => id}, socket) do
+    user = Accounts.get_user!(id)
+
+    {:ok, _} = Accounts.revoke_admin(user, %{"role_id" => 2})
+
+    {:noreply, stream_insert(socket, :users, user)}
   end
 end

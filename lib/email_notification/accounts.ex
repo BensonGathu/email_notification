@@ -44,8 +44,23 @@ defmodule EmailNotification.Accounts do
     Repo.get_by(User, email: email)
   end
 
+
   def delete_user(%User{} = user) do
     Repo.delete(user)
+  end
+
+
+
+  def make_admin(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def revoke_admin(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -80,7 +95,7 @@ defmodule EmailNotification.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id), do: Repo.get!(User, id) 
 
   ## User registration
 
@@ -259,7 +274,7 @@ defmodule EmailNotification.Accounts do
   """
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+    Repo.one(query)|> Repo.preload(:role)
   end
 
   @doc """

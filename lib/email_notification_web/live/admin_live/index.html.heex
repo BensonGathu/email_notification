@@ -2,11 +2,11 @@
   Users
   <:actions>
     <.link patch={~p"/admins/new"}>
-      <.button>Add User</.button>
+      <.button>Add Admin</.button>
     </.link>
   </:actions>
 </.header>
-<!-- Assuming roles are atoms like :user, :admin, etc. -->
+
 <.table
   id="admins"
   rows={@streams.users}
@@ -27,6 +27,7 @@
     </div>
     <.link patch={~p"/admins/#{user}/edit"}>Edit</.link>
   </:action>
+
   <:action :let={{id, user}}>
     <.link
       phx-click={JS.push("delete", value: %{id: user.id}) |> hide("##{id}")}
@@ -34,6 +35,24 @@
     >
       Delete
     </.link>
+  </:action>
+
+  <:action :let={{id, user}}>
+    <%= if user.role.name == "user" do %>
+      <.link
+        phx-click={JS.push("makeAdmin", value: %{id: user.id}) |> hide("##{id}")}
+        data-confirm="Are you sure?"
+      >
+        Make Admin
+      </.link>
+    <% else %> 
+      <.link
+        phx-click={JS.push("revokeAdmin", value: %{id: user.id}) |> hide("##{id}")}
+        data-confirm="Are you sure?"
+      >
+        Revoke Admin
+      </.link>
+    <% end %>
   </:action>
 </.table>
 
@@ -53,5 +72,3 @@
     patch={~p"/admins"}
   />
 </.modal>
-
-
