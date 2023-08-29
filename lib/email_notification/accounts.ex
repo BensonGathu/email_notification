@@ -40,9 +40,15 @@ defmodule EmailNotification.Accounts do
   def list(admins) do
   end
 
-  def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+  # def get_user_by_email(email) when is_binary(email) do
+  #   Repo.get_by(User, email: email)
+  # end
+
+  def get_user_by_email!(email) do
+    from(c in User, where: [email: ^email])
+    |> Repo.one!()
   end
+
 
 
   def delete_user(%User{} = user) do
@@ -113,6 +119,12 @@ defmodule EmailNotification.Accounts do
     #  |> Repo.preload(:role)
   end
 
+  def get_user_with_email!(email) do
+    Logger.info("GETING BY EMAIL")
+    Logger.info(email)
+    Repo.get!(User, email)
+    #  |> Repo.preload(:role)
+  end
   ## User registration
 
   @doc """

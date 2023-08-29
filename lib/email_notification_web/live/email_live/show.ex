@@ -15,7 +15,7 @@ defmodule EmailNotificationWeb.EmailLive.Show do
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:email, Emails.get_email!(id))}
   end
-
+ 
   defp page_title(:show), do: "Show Email"
   defp page_title(:edit), do: "Edit Email"
 end

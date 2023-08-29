@@ -18,7 +18,7 @@ defmodule EmailNotification.Emails do
 
   """
   def list_emails do
-    Repo.all(Email)
+    Repo.all(Email) |> Repo.preload(:contact)
   end
 
   @doc """
@@ -42,6 +42,21 @@ defmodule EmailNotification.Emails do
     |> Repo.preload(:contact)
     |> Repo.preload(:group)
   end
+ 
+  # Get recieved emails
+  def get_received_email_by_useremail!(email) do
+    query =
+      from(e in Email,
+        join: c in assoc(e, :contact),
+        where: c.email_address == ^email,
+        preload: [:contact, :group, :user]
+      )
+
+      Repo.all(query)
+    end
+
+
+
   @doc """
   Creates a email.
 

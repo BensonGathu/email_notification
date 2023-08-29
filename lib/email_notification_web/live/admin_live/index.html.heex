@@ -26,7 +26,16 @@
       <div class="sr-only">
         <.link navigate={~p"/admins/#{user}"}>Show</.link>
       </div>
-      <.link patch={~p"/admins/#{user}/edit"}>Edit</.link>
+
+      <.link patch={~p"/admins/#{user}/edit"}>
+        <button
+          type="button"
+          class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Edit
+        </button>
+        
+      </.link>
     <% end %>
   </:action>
 
@@ -35,7 +44,12 @@
       phx-click={JS.push("delete", value: %{id: user.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
-      Delete
+      <button
+        type="button"
+        class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Delete
+      </button>
     </.link>
   </:action>
 
@@ -46,14 +60,24 @@
           phx-click={JS.push("makeAdmin", value: %{id: user.id}) |> hide("##{id}")}
           data-confirm="Are you sure?"
         >
-          Make Admin
+          <button
+            type="button"
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Make Admin
+          </button>
         </.link>
       <% else %>
         <.link
           phx-click={JS.push("revokeAdmin", value: %{id: user.id}) |> hide("##{id}")}
           data-confirm="Are you sure?"
         >
-          Revoke Admin
+          <button
+            type="button"
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Revoke Admin
+          </button>
         </.link>
       <% end %>
 
@@ -61,16 +85,28 @@
         <.link
           phx-click={JS.push("makeSuperuser", value: %{id: user.id}) |> hide("##{id}")}
           data-confirm="Are you sure?"
-        >
-          Make Superuser
+        > 
+          <button
+            type="button"
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Make Superuser
+          </button>
         </.link>
+        <%else %>
+       
       <% end %>
       <%= if user.role.name == "superuser" do %>
         <.link
           phx-click={JS.push("revokeSuperuser", value: %{id: user.id}) |> hide("##{id}")}
           data-confirm="Are you sure?"
         >
-          Revoke Superuser
+          <button
+            type="button"
+            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-red-700 dark:focus:ring-blue-800"
+          >
+            Revoke Superuser
+          </button>
         </.link>
       <% end %>
     <% end %>

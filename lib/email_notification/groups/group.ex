@@ -17,5 +17,6 @@ defmodule EmailNotification.Groups.Group do
     |> cast(attrs, [:name, :user_id])
     |> validate_required([:name, :user_id])
     |> unique_constraint([:user_id, :name])
+    |> assoc_constraint(:user)
   end
 end

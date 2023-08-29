@@ -6,7 +6,7 @@ defmodule EmailNotification.Repo.Migrations.CreateEmails do
       add :subject, :string
       add :body, :text
       add :status, :string
-      add :user_id, references(:users, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :delete_all)
       add :contact_id, references(:contacts, on_delete: :nothing)
       add :group_id, references(:groups, on_delete: :nothing)
 

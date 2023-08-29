@@ -10,9 +10,8 @@ defmodule EmailNotification.Contacts.Contact do
     has_many :group_contacts, EmailNotification.GroupContacts.GroupContact
     has_many :groups, through: [:group_contacts, :group]
     belongs_to :user, EmailNotification.Accounts.User
-
     timestamps()
-  end 
+  end
 
   @doc false
   def changeset(contact, attrs) do
@@ -20,6 +19,8 @@ defmodule EmailNotification.Contacts.Contact do
     |> cast(attrs, [:first_name, :last_name, :email_address, :user_id])
     |> validate_required([:first_name, :last_name, :email_address, :user_id])
     |> unique_constraint([:user_id, :email_address])
+
+    |> assoc_constraint(:user)
 
   end
 end

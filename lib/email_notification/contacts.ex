@@ -34,8 +34,13 @@ defmodule EmailNotification.Contacts do
       iex> get_contact!(456)
       ** (Ecto.NoResultsError)
 
-  """ 
+  """
   def get_contact!(id), do: Repo.get!(Contact, id) |> Repo.preload(:user)
+
+  def get_contact_email!(id) do
+    contact = Repo.get!(Contact, id) |> Repo.preload(:user)
+    contact.email_address
+  end
 
   def get_contact_by_userID!(id) do
     from(c in  Contact, where: [user_id: ^id])

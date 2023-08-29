@@ -7,6 +7,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   alias EmailNotification.Contacts
   alias EmailNotification.EmailSender
   alias EmailNotification.Groups
+  alias EmailNotification.Accounts
 
   @impl true
   def update(%{email: email} = assigns, socket) do
@@ -18,6 +19,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:show_group_dropdown, false)
      |> assign(:contacts, contact)
      |> assign(:groups, group)
      |> assign_form(changeset)}
@@ -31,6 +33,14 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
+  end
+
+  def handle_event("send_to_changed", %{"email" => %{"send_to" => "single_contact"}}, socket) do
+    {:noreply, assign(socket, show_group_dropdown: false)}
+  end
+
+  def handle_event("send_to_changed", %{"email" => %{"send_to" => "group"}}, socket) do
+    {:noreply, assign(socket, show_group_dropdown: true)}
   end
 
   # def handle_event("save", %{"email" => email_params} = params, socket) do
@@ -55,17 +65,24 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   #   end
   # end
 
-
-
   def handle_event("save", %{"email" => email_params} = params, socket) do
     current_user = socket.assigns.current_user
 
+    contact_id = email_params["contact_id"]
+
+    # get email address based on contact_id
+    IO.inspect(Contacts.get_contact_email!(contact_id))
+
+    # get user_based on the returned contactemail
+   IO.in Accounts.get_user_with_email!(Contacts.get_contact_email!(contact_id))
+
     email_params_with_user =
       Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
-      # EmailSender.send_email(email_params_with_user)
+
+    # EmailSender.send_email(email_params_with_user)
     save_email(socket, socket.assigns.action, email_params_with_user)
   end
-  
+
   def extract_values(data) do
     {body, subject, contact_email} =
       Enum.reduce(data, {nil, nil, nil}, fn

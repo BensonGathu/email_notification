@@ -1,4 +1,5 @@
 defmodule EmailNotificationWeb.EmailLive.Index do
+  require Logger
   use EmailNotificationWeb, :live_view
 
   alias EmailNotification.Emails
@@ -7,7 +8,14 @@ defmodule EmailNotificationWeb.EmailLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     # current_user = socket.assigns.current_user
-    {:ok, stream(socket, :emails, Emails.get_email_by_userID!(socket.assigns.current_user.id))}
+ socket = socket |> assign(:show_group_dropdown , false)
+    socket = socket |> assign(:inboxes, Emails.get_received_email_by_useremail!(socket.assigns.current_user.email))
+    {:ok,
+     stream(
+       socket,
+       :emails,
+       Emails.get_email_by_userID!(socket.assigns.current_user.id)
+     )}
   end
 
   @impl true
@@ -44,5 +52,12 @@ defmodule EmailNotificationWeb.EmailLive.Index do
     {:ok, _} = Emails.delete_email(email)
 
     {:noreply, stream_delete(socket, :emails, email)}
+  end
+  def handle_event("send_to_changed", %{"send_to" => "group"}, socket) do
+    {:noreply, assign(socket, show_group_dropdown: true)}
+  end
+
+  def handle_event("send_to_changed", %{"send_to" => _other}, socket) do
+    {:noreply, assign(socket, show_group_dropdown: false)}
   end
 end
