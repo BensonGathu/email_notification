@@ -23,5 +23,7 @@
 # MyApp.AdminLink.insert(%{admin_id: admin_user.id, user_id: user1.id})
 # MyApp.AdminLink.insert(%{admin_id: admin_user.id, user_id: user2.id})
 
+# iex -S mix
 # new_role_params = %{name: "admin", permissions: ["superuser"] }
+  # 1) admin, 2) user, 3)superuser
 # new_role = %EmailNotification.Roles.Role{} |> EmailNotification.Roles.Role.changeset(new_role_params) |> EmailNotification.Repo.insert!()

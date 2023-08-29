@@ -22,10 +22,12 @@
   <:col :let={{_id, user}} label="Role"><%= user.role.name %></:col>
 
   <:action :let={{_id, user}}>
-    <div class="sr-only">
-      <.link navigate={~p"/admins/#{user}"}>Show</.link>
-    </div>
-    <.link patch={~p"/admins/#{user}/edit"}>Edit</.link>
+    <%= if @current_user.role.name == "superuser" do %>
+      <div class="sr-only">
+        <.link navigate={~p"/admins/#{user}"}>Show</.link>
+      </div>
+      <.link patch={~p"/admins/#{user}/edit"}>Edit</.link>
+    <% end %>
   </:action>
 
   <:action :let={{id, user}}>
@@ -38,20 +40,39 @@
   </:action>
 
   <:action :let={{id, user}}>
-    <%= if user.role.name == "user" do %>
-      <.link
-        phx-click={JS.push("makeAdmin", value: %{id: user.id}) |> hide("##{id}")}
-        data-confirm="Are you sure?"
-      >
-        Make Admin
-      </.link>
-    <% else %> 
-      <.link
-        phx-click={JS.push("revokeAdmin", value: %{id: user.id}) |> hide("##{id}")}
-        data-confirm="Are you sure?"
-      >
-        Revoke Admin
-      </.link>
+    <%= if @current_user.role.name == "superuser" do %>
+      <%= if user.role.name == "user" do %>
+        <.link
+          phx-click={JS.push("makeAdmin", value: %{id: user.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+        >
+          Make Admin
+        </.link>
+      <% else %>
+        <.link
+          phx-click={JS.push("revokeAdmin", value: %{id: user.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+        >
+          Revoke Admin
+        </.link>
+      <% end %>
+
+      <%= if user.role.name == "admin" do %>
+        <.link
+          phx-click={JS.push("makeSuperuser", value: %{id: user.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+        >
+          Make Superuser
+        </.link>
+      <% end %>
+      <%= if user.role.name == "superuser" do %>
+        <.link
+          phx-click={JS.push("revokeSuperuser", value: %{id: user.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+        >
+          Revoke Superuser
+        </.link>
+      <% end %>
     <% end %>
   </:action>
 </.table>

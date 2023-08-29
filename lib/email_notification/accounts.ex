@@ -63,6 +63,19 @@ defmodule EmailNotification.Accounts do
     |> Repo.update()
   end
 
+  def make_superuser(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def revoke_superuser(%User{} = user, attrs) do
+    user
+    |> User.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+
   @doc """
   Gets a user by email and password.
 

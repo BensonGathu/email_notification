@@ -11,13 +11,11 @@ defmodule EmailNotificationWeb.AdminLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-
     users = Accounts.list_users()
     filtered_users = Enum.reject(users, fn user -> user.id == socket.assigns.current_user.id end)
 
     {:ok, stream(socket, :users, filtered_users)}
   end
-
 
   @impl true
   def handle_params(params, _url, socket) do
@@ -59,7 +57,6 @@ defmodule EmailNotificationWeb.AdminLive.Index do
   def handle_event("makeAdmin", %{"id" => id}, socket) do
     user = Accounts.get_user!(id)
 
-
     {:ok, _} = Accounts.make_admin(user, %{"role_id" => 1})
 
     {:noreply, stream_insert(socket, :users, user)}
@@ -70,6 +67,24 @@ defmodule EmailNotificationWeb.AdminLive.Index do
     user = Accounts.get_user!(id)
 
     {:ok, _} = Accounts.revoke_admin(user, %{"role_id" => 2})
+
+    {:noreply, stream_insert(socket, :users, user)}
+  end
+
+  @impl true
+  def handle_event("makeSuperuser", %{"id" => id}, socket) do
+    user = Accounts.get_user!(id)
+
+    {:ok, _} = Accounts.make_superuser(user, %{"role_id" => 3})
+
+    {:noreply, stream_insert(socket, :users, user)}
+  end
+
+  @impl true
+  def handle_event("revokeSuperuser", %{"id" => id}, socket) do
+    user = Accounts.get_user!(id)
+
+    {:ok, _} = Accounts.revoke_superuser(user, %{"role_id" => 1})
 
     {:noreply, stream_insert(socket, :users, user)}
   end

@@ -7,7 +7,8 @@
   </:actions>
 </.header>
 
-<.table
+<div class="relative overflow-x-auto">
+<.table 
   id="emails"
   rows={@streams.emails}
   row_click={fn {_id, email} -> JS.navigate(~p"/emails/#{email}") end}
@@ -28,9 +29,12 @@
       data-confirm="Are you sure?"
     >
       Delete
-    </.link>
+    </.link> 
   </:action>
+  
 </.table>
+
+</div>
 
 <.modal :if={@live_action in [:new, :edit]} id="email-modal" show on_cancel={JS.patch(~p"/emails")}>
   <.live_component
