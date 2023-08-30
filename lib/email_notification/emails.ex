@@ -38,13 +38,14 @@ defmodule EmailNotification.Emails do
       ** (Ecto.NoResultsError)
 
   """
-  def get_email!(id), do: Repo.get!(Email, id)
+  def get_email!(id), do: Repo.get!(Email, id) |> Repo.preload(:contact)
 
   def get_email_by_userID!(id) do
     from(c in Email, where: [user_id: ^id])
     |> Repo.all()
-    |> Repo.preload(:contact)
     |> Repo.preload(:group)
+    |> Repo.preload(:contact)
+
 
   end
 
@@ -58,6 +59,10 @@ defmodule EmailNotification.Emails do
       )
 
     Repo.all(query)
+  end
+
+  def get_received_email_by_group!(goupID) do
+
   end
 
   @doc """
@@ -97,44 +102,48 @@ defmodule EmailNotification.Emails do
   end
 
 
-  def update_email_by_id!(email_id) do
-    email =
-      from(e in EmailNotification.Emails.Email,
-        where: e.id == ^email_id
-      )
-      |> Repo.one()
-      |> Repo.preload(:contact)
+  # def update_email_by_id!(email_id) do
+  #   IO.inspect(email_id)
+  #   email =
+  #     from(e in EmailNotification.Emails.Email,
+  #       where: e.id == ^email_id
+  #     )
+  #     |> Repo.one()
+  #     |> Repo.preload(:contact)
 
-    case email do
-      nil ->
-        {:error, "Email not found"}
+  #   case email do
+  #     nil ->
+  #       {:error, "Email not found"}
 
-      %EmailNotification.Emails.Email{} = email ->
-        Logger.info("Updating email with ID #{email.contact.email_address}")
+  #     %Email{} = email ->
+  #       Logger.info("Updating email with ID #{email.contact.email_address}")
 
-        contact_email = email.contact.email_address
-        user_exists = user_exists?(contact_email)
+  #       contact_email = email.contact.email_address
+  #       user_exists = user_exists?(contact_email)
+  #       Logger.info("user_exists")
+  #       Logger.info(user_exists)
 
-        Logger.info(user_exists)
+  #       updated_status = if user_exists, do: "Sent", else: "Failed"
+  #       Logger.info(updated_status)
+  #       # working till  here
 
-        updated_status = if user_exists, do: "Sent", else: "Failed"
-        Logger.info(updated_status)
-        # working till hhere
-        updated_email = change_email_status(email, updated_status)
-        changeset = EmailNotification.Emails.change_email(email, Map.from_struct(email))
 
-        updated_email =
-          case Repo.update(changeset) do
-            {:ok, _updated_email} ->
-              {:ok, email}
+  #       updated_email = change_email_status(email, updated_status)
 
-            {:error, changeset} ->
-              {:error, changeset}
-          end
+  #       changeset = EmailNotification.Emails.change_email(email, Map.from_struct(email))
 
-        updated_email
-    end
-  end
+  #       updated_email =
+  #         case Repo.update(changeset) do
+  #           {:ok, _updated_email} ->
+  #             {:ok, email}
+
+  #           {:error, changeset} ->
+  #             {:error, changeset}
+  #         end
+
+  #       updated_email
+  #   end
+  # end
   defp user_exists?(email) do
     case Accounts.get_user_by_email!(email) do
       nil -> false

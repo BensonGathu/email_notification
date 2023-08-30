@@ -19,14 +19,18 @@
     <div class="sr-only">
       <.link navigate={~p"/contacts/#{contact}"}>Show</.link>
     </div>
-    <.link patch={~p"/contacts/#{contact}/edit"}>Edit</.link>
+    <.link patch={~p"/contacts/#{contact}/edit"}>
+    
+    <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+</.link>
   </:action>
   <:action :let={{id, contact}}>
     <.link
       phx-click={JS.push("delete", value: %{id: contact.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
-      Delete
+     <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+      
     </.link>
   </:action>
 </.table> 

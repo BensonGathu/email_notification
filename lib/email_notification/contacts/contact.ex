@@ -20,7 +20,7 @@ defmodule EmailNotification.Contacts.Contact do
     |> validate_required([:first_name, :last_name, :email_address, :user_id])
     |> unique_constraint([:user_id, :email_address])
 
-    |> assoc_constraint(:user)
+    # |> assoc_constraint(:user)
 
   end
 end

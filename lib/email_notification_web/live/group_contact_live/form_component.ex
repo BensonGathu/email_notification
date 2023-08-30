@@ -60,7 +60,7 @@ defmodule EmailNotificationWeb.GroupContactLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Group contact created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> redirect(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

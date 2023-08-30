@@ -15,16 +15,23 @@
 </.header>
 
 <.table id="emails" rows={@streams.emails} row_click={}>
+
   <:col :let={{_id, email}} label="Recipient">
-    <%=email.contact.email_address  %> 
-  </:col>
+    <%= if email.contact do %>
+        <%= email.contact.email_address %>
+      <% else %>
+        <%= email.group.name %>:
+      <% end %>
+  </:col> 
+
+  
   <:col :let={{_id, email}} label="Subject">
     <%=email.subject  %> 
   </:col>
   <:col :let={{_id, email}} label="Body">
     <%=email.body  %> 
   </:col>
-
+ 
   <:col :let={{_id, email}} label="Status"><%= email.status %></:col>
   <!-- <:action :let={{id, email}}>
     <.link
@@ -32,7 +39,7 @@
       data-confirm="Are you sure?"
     >
       Remove
-    </.link> 
+    </.link>   
   </:action> -->
 </.table>
 

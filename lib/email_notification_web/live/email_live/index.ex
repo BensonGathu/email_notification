@@ -9,7 +9,6 @@ defmodule EmailNotificationWeb.EmailLive.Index do
   def mount(_params, _session, socket) do
     # current_user = socket.assigns.current_user
     socket = socket |> assign(:show_group_dropdown, false)
-
     socket =
       socket
       |> assign(
@@ -71,17 +70,20 @@ defmodule EmailNotificationWeb.EmailLive.Index do
 
   @impl true
   def handle_event("retryEmail", %{"id" => id}, socket) do
-    IO.inspect("Retrying Email")
-    email = Emails.get_email!(id)
+    # IO.inspect("Retrying Email")
+    # email = Emails.get_email!(id)
 
-    case Emails.update_email_by_id!(id) do
-      {:ok, updated_email} ->
-        {:noreply,
-         assign(socket, emails: update_email_in_emails(socket.assigns.emails, updated_email))}
+    # case Emails.update_email_by_id!(id) do
+    #   {:ok, updated_email} ->
+    #     {:noreply,
+    #      assign(socket, emails: update_email_in_emails(socket.assigns.emails, updated_email))}
 
-      {:error, _} ->
-        {:noreply, socket}
-    end
+    #   {:error, _} ->
+    #     {:noreply, socket}
+    # end
+
+    # {:noreply, assign(socket, show_group_dropdown: false)}
+
   end
 
   defp update_email_in_emails(emails, updated_email) do

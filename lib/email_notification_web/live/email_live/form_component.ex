@@ -77,7 +77,6 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
       email_list = get_group_member_emails(email_params["group_id"])
 
       Enum.each(email_list, fn email ->
-
         user_exists = Accounts.get_user_by_email!(email)
 
         status =
@@ -113,6 +112,11 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
       # EmailSender.send_email(email_params_with_user)
       save_email(socket, socket.assigns.action, email_params_with_user)
     end
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "Email Saved successfully")
+     |> push_patch(to: socket.assigns.patch)}
   end
 
   # function to get members in a grp
@@ -175,7 +179,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Email created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> redirect(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
