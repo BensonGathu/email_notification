@@ -4,9 +4,12 @@ defmodule EmailNotification.Emails do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias EmailNotification.Repo
 
   alias EmailNotification.Emails.Email
+  alias EmailNotification.Accounts
+  alias EmailNotification.GroupContacts.GroupContact
 
   @doc """
   Returns the list of emails.
@@ -36,26 +39,26 @@ defmodule EmailNotification.Emails do
 
   """
   def get_email!(id), do: Repo.get!(Email, id)
+
   def get_email_by_userID!(id) do
-    from(c in  Email, where: [user_id: ^id])
+    from(c in Email, where: [user_id: ^id])
     |> Repo.all()
     |> Repo.preload(:contact)
     |> Repo.preload(:group)
+
   end
- 
+
   # Get recieved emails
   def get_received_email_by_useremail!(email) do
     query =
       from(e in Email,
         join: c in assoc(e, :contact),
-        where: c.email_address == ^email,
+        where: c.email_address == ^email and e.status == "Sent",
         preload: [:contact, :group, :user]
       )
 
-      Repo.all(query)
-    end
-
-
+    Repo.all(query)
+  end
 
   @doc """
   Creates a email.
@@ -94,6 +97,54 @@ defmodule EmailNotification.Emails do
   end
 
 
+  def update_email_by_id!(email_id) do
+    email =
+      from(e in EmailNotification.Emails.Email,
+        where: e.id == ^email_id
+      )
+      |> Repo.one()
+      |> Repo.preload(:contact)
+
+    case email do
+      nil ->
+        {:error, "Email not found"}
+
+      %EmailNotification.Emails.Email{} = email ->
+        Logger.info("Updating email with ID #{email.contact.email_address}")
+
+        contact_email = email.contact.email_address
+        user_exists = user_exists?(contact_email)
+
+        Logger.info(user_exists)
+
+        updated_status = if user_exists, do: "Sent", else: "Failed"
+        Logger.info(updated_status)
+        # working till hhere
+        updated_email = change_email_status(email, updated_status)
+        changeset = EmailNotification.Emails.change_email(email, Map.from_struct(email))
+
+        updated_email =
+          case Repo.update(changeset) do
+            {:ok, _updated_email} ->
+              {:ok, email}
+
+            {:error, changeset} ->
+              {:error, changeset}
+          end
+
+        updated_email
+    end
+  end
+  defp user_exists?(email) do
+    case Accounts.get_user_by_email!(email) do
+      nil -> false
+      _ -> true
+    end
+  end
+  defp change_email_status(email, status) do
+    email
+    |> Email.changeset(%{status: status})
+  end
   @doc """
   Deletes a email.
 

@@ -78,7 +78,7 @@ defmodule EmailNotificationWeb.Router do
       on_mount: [{EmailNotificationWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-      live "/", HomeLive.Index, :index
+      live "/", ContactLive.Index, :index
       # Contacts Routes
       live "/contacts", ContactLive.Index, :index
       live "/contacts/new", ContactLive.Index, :new

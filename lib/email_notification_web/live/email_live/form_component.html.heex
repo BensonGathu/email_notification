@@ -14,7 +14,7 @@
     <.input field={@form[:subject]} type="text" label="Subject" />
     <.input field={@form[:body]} type="text" label="Body" />
 
-  <.input
+    <.input
       field={@form[:send_to]}
       type="select"
       label="Send To"
@@ -22,34 +22,29 @@
         {"Single Contact", :single_contact},
         {"Group", :group}
       ]}
-        phx-change="send_to_changed"
-
+      phx-change="send_to_changed"
     />
 
-    <%!-- <select phx-change="send_to_changed">
-  <option value="single_contact">Single Contact</option>
-  <option value="group">Group</option>
-</select> --%>
+  
 
     <%= if not @show_group_dropdown do %>
-    <.input
-      field={@form[:contact_id]}
-      type="select"
-      label="Contact"
-      options={Enum.map(@contacts, fn contact -> {contact.email_address, contact.id} end)}
-    />
-     <% end %>
-
-    <%= if @show_group_dropdown do %>
- 
-    <%= if @current_user.plan == :gold or  @current_user.role.name =="superuser" do %>
       <.input
-        field={@form[:group_id]}
+        field={@form[:contact_id]}
         type="select"
-        label="Group"
-        options={Enum.map(@groups, fn group -> {group.name, group.id} end)}
+        label="Select Contact"
+        options={Enum.map(@contacts, fn contact -> {contact.email_address, contact.id} end)}
       />
     <% end %>
+
+    <%= if @show_group_dropdown do %>
+      <%= if @current_user.plan == :gold or  @current_user.role.name =="superuser" do %>
+        <.input
+          field={@form[:group_id]}
+          type="select"
+          label="Select Group"
+          options={Enum.map(@groups, fn group -> {group.name, group.id} end)}
+        />
+      <% end %>
     <% end %>
     <:actions>
       <.button phx-disable-with="Saving...">Send Email</.button>

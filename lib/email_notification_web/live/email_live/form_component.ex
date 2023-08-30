@@ -8,6 +8,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   alias EmailNotification.EmailSender
   alias EmailNotification.Groups
   alias EmailNotification.Accounts
+  alias EmailNotification.GroupContacts
 
   @impl true
   def update(%{email: email} = assigns, socket) do
@@ -71,18 +72,65 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
     contact_id = email_params["contact_id"]
 
     # get email address based on contact_id
-    IO.inspect(Contacts.get_contact_email!(contact_id))
 
-    # get user_based on the returned contactemail
-   IO.in Accounts.get_user_with_email!(Contacts.get_contact_email!(contact_id))
+    if socket.assigns.show_group_dropdown do
+      email_list = get_group_member_emails(email_params["group_id"])
 
-    email_params_with_user =
-      Map.put(email_params, "user_id", current_user.id) |> Map.put("status", "Pending")
+      Enum.each(email_list, fn email ->
 
-    # EmailSender.send_email(email_params_with_user)
-    save_email(socket, socket.assigns.action, email_params_with_user)
+        user_exists = Accounts.get_user_by_email!(email)
+
+        status =
+          if user_exists do
+            "Sent"
+          else
+            "Failed"
+          end
+
+        email_params_with_user =
+          Map.put(email_params, "user_id", current_user.id)
+          |> Map.put("status", status)
+
+        # EmailSender.send_email(email_params_with_user)
+        save_email(socket, socket.assigns.action, email_params_with_user)
+      end)
+    else
+      contact_email = Contacts.get_contact_email!(contact_id)
+
+      user_exists = Accounts.get_user_by_email!(contact_email)
+
+      status =
+        if user_exists do
+          "Sent"
+        else
+          "Failed"
+        end
+
+      email_params_with_user =
+        Map.put(email_params, "user_id", current_user.id)
+        |> Map.put("status", status)
+
+      # EmailSender.send_email(email_params_with_user)
+      save_email(socket, socket.assigns.action, email_params_with_user)
+    end
   end
 
+  # function to get members in a grp
+  def get_group_member_emails(id) do
+    group_contacts = GroupContacts.get_group_contact_by_groupID!(id)
+
+    emails =
+      Enum.map(group_contacts, fn group_contact ->
+        contact = group_contact.contact
+        contact.email_address
+      end)
+
+    IO.inspect("emails")
+    IO.inspect(emails)
+    emails
+  end
+
+  #
   def extract_values(data) do
     {body, subject, contact_email} =
       Enum.reduce(data, {nil, nil, nil}, fn
@@ -103,6 +151,8 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   end
 
   defp save_email(socket, :edit, email_params) do
+    IO.inspect(socket.assigns)
+
     case Emails.update_email(socket.assigns.email, email_params) do
       {:ok, email} ->
         notify_parent({:saved, email})

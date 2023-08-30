@@ -45,11 +45,15 @@ defmodule EmailNotification.Accounts do
   # end
 
   def get_user_by_email!(email) do
-    from(c in User, where: [email: ^email])
-    |> Repo.one!()
+    user = Repo.get_by(User, email: email)
+    !is_nil(user)
   end
 
-
+  # def get_user_by_email(email) do
+  #   MyApp.User
+  #   |> where([u], u.email == ^email)
+  #   |> Repo.one()
+  # end
 
   def delete_user(%User{} = user) do
     Repo.delete(user)
@@ -119,12 +123,7 @@ defmodule EmailNotification.Accounts do
     #  |> Repo.preload(:role)
   end
 
-  def get_user_with_email!(email) do
-    Logger.info("GETING BY EMAIL")
-    Logger.info(email)
-    Repo.get!(User, email)
-    #  |> Repo.preload(:role)
-  end
+
   ## User registration
 
   @doc """

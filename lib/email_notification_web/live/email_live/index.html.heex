@@ -8,15 +8,39 @@
 </.header>
 
 <div class="">
+  <b>
+    <h1>Sent Emails</h1>
+  </b>
   <.table
-    id="emails" 
+    id="emails"
     rows={@streams.emails}
     row_click={fn {_id, email} -> JS.navigate(~p"/emails/#{email}") end}
   >
-    <:col :let={{_id, email}} label="Recipient"><%= email.contact.email_address %></:col>
+    <:col :let={{_id, email}} label="Recipient">
+      <%= if email.contact do %>
+        <%= email.contact.email_address %>
+      <% else %>
+        <%= email.group.name %>:
+      <% end %>
+    </:col>
+
     <:col :let={{_id, email}} label="Subject"><%= email.subject %></:col>
     <:col :let={{_id, email}} label="Body"><%= email.body %></:col>
+
     <:col :let={{_id, email}} label="Status"><%= email.status %></:col>
+    <:action :let={{id, email}}>
+      <%= if @current_user.role.name == "admin" or @current_user.role.name == "superuser" or @current_user.plan == :gold  do %>
+        <%= if email.status == "Failed" do %>
+          <.link
+            phx-click={JS.push("retryEmail", value: %{id: email.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            Retry
+          </.link>
+        <% end %>
+      <% end %>
+    </:action>
+
     <:action :let={{_id, email}}>
       <div class="sr-only">
         <.link navigate={~p"/emails/#{email}"}>Show</.link>
@@ -30,27 +54,22 @@
       >
         Delete
       </.link>
-    </:action> 
+    </:action>
   </.table>
 </div>
 
-
-
 <div class="">
-<.header>
-  Inbox
+  <br /><br />
+  <br /><hr />
+  <h3>
+    <b> Inbox</b>
+  </h3>
 
-</.header>
+  <.table id="emails" rows={@inboxes} row_click={}>
+    <:col :let={inbox} label="From"><%= inbox.user.email %></:col>
+    <:col :let={inbox} label="Subject"><%= inbox.subject %></:col>
+    <:col :let={inbox} label="Body"><%= inbox.body %></:col>
 
-  <.table
-    id="emails"
-    rows={@inboxes}
-    row_click={}
-  >
-    <:col :let={ inbox} label="From"><%= inbox.user.email %></:col>
-     <:col :let={ inbox} label="Subject"><%= inbox.subject %></:col>
-      <:col :let={ inbox} label="Body"><%= inbox.body %></:col>
-      
     <%!-- <:col :let={{_id, inbox}} label="Subject"><%= inbox.subject %></:col>
     <:col :let={{_id, inbox}} label="Body"><%= inbox.body %></:col>
     <:col :let={{_id, inbox}} label="Status"><%= inbox.status %></:col>  --%>
@@ -69,10 +88,7 @@
       </.link>
     </:action>  --%>
   </.table>
-</div> 
-
-
-
+</div>
 
 <%!-- <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800" id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
