@@ -9,6 +9,7 @@ defmodule EmailNotification.Emails.Email do
     belongs_to :user, EmailNotification.Accounts.User
     belongs_to :contact, EmailNotification.Contacts.Contact
     belongs_to :group, EmailNotification.Groups.Group
+    has_many :email_status, EmailNotification.Emails.EmailStatus
     timestamps()
   end
 

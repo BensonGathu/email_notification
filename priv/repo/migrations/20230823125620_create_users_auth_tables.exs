@@ -12,7 +12,7 @@ defmodule EmailNotification.Repo.Migrations.CreateUsersAuthTables do
       add :plan, :citext, null: false, default: "regular"
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
-      
+
       add :role_id, references(:roles, on_delete: :nothing)
 
       timestamps()
@@ -32,3 +32,4 @@ defmodule EmailNotification.Repo.Migrations.CreateUsersAuthTables do
     create unique_index(:users_tokens, [:context, :token])
   end
 end
+ 

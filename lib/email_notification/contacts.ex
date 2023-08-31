@@ -37,7 +37,7 @@ defmodule EmailNotification.Contacts do
   """
   def get_contact!(id), do: Repo.get!(Contact, id) |> Repo.preload(:user)
 
-  def get_contact_email!(id) do
+  def get_contact_email!(id) do 
     contact = Repo.get!(Contact, id) |> Repo.preload(:user)
     contact.email_address
   end

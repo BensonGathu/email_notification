@@ -7,7 +7,7 @@ defmodule EmailNotification.Accounts.User do
     field :phoneNumber, :string
     field :first_name
     field :last_name
-    field :plan, Ecto.Enum, values: [:regular, :gold]
+    field :plan, Ecto.Enum, values: [:regular, :gold] 
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -23,7 +23,7 @@ defmodule EmailNotification.Accounts.User do
 
     timestamps()
   end
- 
+
   @doc """
   A user changeset for registration.
 
