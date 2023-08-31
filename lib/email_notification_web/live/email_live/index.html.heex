@@ -2,7 +2,21 @@
   <h1>My Emails</h1>
   <:actions>
     <.link patch={~p"/emails/new"}>
-      <.button>New Email</.button>
+      <button
+        type="button"
+        class="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        <svg
+          class="w-3.5 h-3.5 text-white mr-2"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 16"
+        >
+          <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+        </svg>
+        Send Email
+      </button>
     </.link>
   </:actions>
 </.header>
@@ -22,7 +36,7 @@
       <% else %>
         <%= email.group.name %>:
       <% end %>
-    </:col>  
+    </:col>
 
     <:col :let={{_id, email}} label="Subject"><%= email.subject %></:col>
     <:col :let={{_id, email}} label="Body"><%= email.body %></:col>
@@ -37,9 +51,17 @@
           >
             <button
               type="button"
-              class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-orgrayange-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
             >
-              Retry  
+              <svg
+                class="w-3.5 h-3.5 mr-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 18 21"
+              >
+                <path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+              </svg>
             </button>
           </.link>
         <% end %>
@@ -53,9 +75,17 @@
       <.link patch={~p"/emails/#{email}/edit"}>
         <button
           type="button"
-          class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Edit
+          <svg
+            class="w-3.5 h-3.5 mr-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 18 21"
+          >
+            <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+          </svg>
         </button>
       </.link>
     </:action>
@@ -66,9 +96,17 @@
       >
         <button
           type="button"
-          class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+          class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
         >
-          Delete
+          <svg
+            class="w-3.5 h-3.5 mr-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 18 21"
+          >
+            <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
+          </svg>
         </button>
       </.link>
     </:action>
@@ -89,11 +127,11 @@
     <:col :let={inbox} label="Subject"><%= inbox.subject %></:col>
     <:col :let={inbox} label="Body"><%= inbox.body %></:col> --%>
 
-    <%!-- <:col :let={{_id, inbox}} label="Subject"><%= inbox.subject %></:col>
+<%!-- <:col :let={{_id, inbox}} label="Subject"><%= inbox.subject %></:col>
     <:col :let={{_id, inbox}} label="Body"><%= inbox.body %></:col>
     <:col :let={{_id, inbox}} label="Status"><%= inbox.status %></:col>  --%>
 
-    <%!-- <:action :let={{_id, inbox}}>
+<%!-- <:action :let={{_id, inbox}}>
       <div class="sr-only">
         <.link navigate={~p"/emails/#{inbox}"}>Show</.link>
       </div>
@@ -106,7 +144,7 @@
         Delete 
       </.link>
     </:action>  --%>
-  <%!-- </.table>
+<%!-- </.table>
 </div> --%>
 
 <%!-- <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

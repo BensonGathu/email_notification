@@ -40,6 +40,7 @@ defmodule EmailNotification.Emails do
   """
   def get_email!(id), do: Repo.get!(Email, id) |> Repo.preload(:contact)
 
+
   def get_email_by_userID!(id) do
     from(c in Email, where: [user_id: ^id])
     |> Repo.all()
@@ -48,6 +49,33 @@ defmodule EmailNotification.Emails do
 
 
   end
+
+#   def get_email_by_userID!(id) do
+#     Repo.transaction(fn ->
+#       query =
+#         from(e in EmailNotification.Emails.Email,
+#           where: e.user_id == ^id,
+#           order_by: [asc: e.group_id, desc: e.inserted_at]
+#         )
+
+#       Repo.stream(query)
+#       |> Stream.map(&group_or_keep_emails/1)
+#       |> Stream.reject(&is_nil/1)  # Remove nil values
+#       |> Enum.to_list()  # Convert stream to a list
+#     end)
+#   end
+
+#   defp group_or_keep_emails(email) do
+#     case email.group_id do
+#       nil -> email
+#       group_id when is_integer(group_id) ->
+#         %EmailNotification.Emails.Email{email | group_id: group_id}
+#       _ -> nil
+#     end
+#     |> Repo.preload(:group)
+#     |> Repo.preload(:contact)
+
+# end
 
   # Get recieved emails
   def get_received_email_by_useremail!(email) do
@@ -62,7 +90,6 @@ defmodule EmailNotification.Emails do
   end
 
   def get_received_email_by_group!(goupID) do
-
   end
 
   @doc """
@@ -101,7 +128,6 @@ defmodule EmailNotification.Emails do
     |> Repo.update()
   end
 
-
   # def update_email_by_id!(email_id) do
   #   IO.inspect(email_id)
   #   email =
@@ -127,7 +153,6 @@ defmodule EmailNotification.Emails do
   #       Logger.info(updated_status)
   #       # working till  here
 
-
   #       updated_email = change_email_status(email, updated_status)
 
   #       changeset = EmailNotification.Emails.change_email(email, Map.from_struct(email))
@@ -150,10 +175,12 @@ defmodule EmailNotification.Emails do
       _ -> true
     end
   end
+
   defp change_email_status(email, status) do
     email
     |> Email.changeset(%{status: status})
   end
+
   @doc """
   Deletes a email.
 

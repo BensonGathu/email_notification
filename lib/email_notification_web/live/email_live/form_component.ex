@@ -2,6 +2,7 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   require Logger
   alias ElixirSense.Log
   use EmailNotificationWeb, :live_component
+  alias Swoosh.Email, as: EmailFunctions
 
   alias EmailNotification.Emails
   alias EmailNotification.Contacts
@@ -66,11 +67,65 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
   #   end
   # end
 
+  # def handle_event("save", %{"email" => email_params} = params, socket) do
+  #   current_user = socket.assigns.current_user
+
+  #   contact_id = email_params["contact_id"]
+
+  #   # get email address based on contact_id
+
+  #   if socket.assigns.show_group_dropdown do
+  #     email_list = get_group_member_emails(email_params["group_id"])
+
+  #     Enum.each(email_list, fn email ->
+  #       user_exists = Accounts.get_user_by_email!(email)
+
+  #       status =
+  #         if user_exists do
+  #           "Sent"
+  #         else
+  #           "Failed"
+  #         end
+
+  #       email_params_with_user =
+  #         Map.put(email_params, "user_id", current_user.id)
+  #         |> Map.put("status", status)
+
+  #       # EmailSender.send_email(email_params_with_user)
+  #       save_email(socket, socket.assigns.action, email_params_with_user)
+  #     end)
+  #   else
+  #     contact_email = Contacts.get_contact_email!(contact_id)
+
+  #     user_exists = Accounts.get_user_by_email!(contact_email)
+
+  #     status =
+  #       if user_exists do
+  #         "Sent"
+  #       else
+  #         "Failed"
+  #       end
+
+  #     email_params_with_user =
+  #       Map.put(email_params, "user_id", current_user.id)
+  #       |> Map.put("status", status)
+
+  #     # EmailSender.send_email(email_params_with_user)
+  #     save_email(socket, socket.assigns.action, email_params_with_user)
+  #   end
+
+  #   {:noreply,
+  #    socket
+  #    |> put_flash(:info, "Email Saved successfully")
+  #    |> push_patch(to: socket.assigns.patch)}
+  # end
+
+
   def handle_event("save", %{"email" => email_params} = params, socket) do
     current_user = socket.assigns.current_user
 
     contact_id = email_params["contact_id"]
-
+    IO.inspect(email_params)
     # get email address based on contact_id
 
     if socket.assigns.show_group_dropdown do
@@ -95,22 +150,27 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
       end)
     else
       contact_email = Contacts.get_contact_email!(contact_id)
+      email =
+        EmailFunctions.new()
+        |> EmailFunctions.to(contact_email)
+        |> EmailFunctions.from("bensongathu23@gmail.com")
+        |> EmailFunctions.subject(email_params["subject"])
+        |> EmailFunctions.html_body(email_params["body"])
 
-      user_exists = Accounts.get_user_by_email!(contact_email)
+        IO.inspect(email)
+        case EmailSender.deliver(email, :email_notification) do
+        {:ok, _info} ->
+          {:noreply, assign(socket, :success)}
+        {:error, reason} ->
+          {:noreply, assign(socket, :error, reason)}
+      end
 
-      status =
-        if user_exists do
-          "Sent"
-        else
-          "Failed"
-        end
-
-      email_params_with_user =
-        Map.put(email_params, "user_id", current_user.id)
-        |> Map.put("status", status)
+      # email_params_with_user =
+      #   Map.put(email_params, "user_id", current_user.id)
+      #   |> Map.put("status", status)
 
       # EmailSender.send_email(email_params_with_user)
-      save_email(socket, socket.assigns.action, email_params_with_user)
+      # save_email(socket, socket.assigns.action, email_params_with_user)
     end
 
     {:noreply,
@@ -118,6 +178,8 @@ defmodule EmailNotificationWeb.EmailLive.FormComponent do
      |> put_flash(:info, "Email Saved successfully")
      |> push_patch(to: socket.assigns.patch)}
   end
+
+
 
   # function to get members in a grp
   def get_group_member_emails(id) do

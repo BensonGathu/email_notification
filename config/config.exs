@@ -27,17 +27,24 @@ config :email_notification, EmailNotificationWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :email_notification, EmailNotification.Mailer, adapter: Swoosh.Adapters.Local
-# Configure Bamboo email sender
+config :email_notification, EmailNotification.Mailer,
+adapter: Swoosh.Adapters.SMTP,
+relay: "in-v3.mailjet.com",
+username: "c118aadad27b172b03ced6cbb7811aea",
+password: "cab17312e7a41cbc2b6ec65f80d4c1f3",
+tls: :always,
+ssl: false
 
-config :email_notification, MyApp.Mailer,
-  adapter: Bamboo.SMTPAdapter,
-  server: "smtp.gmail.com",
-  port: 587,
-  username: "",
-  password: "ohmawjghuhuzpxji",
-  tls: :always,
-  retries: 2
+
+# Configure Bamboo email sender
+# config :email_notification, EmailNotification.Mailer,
+#   adapter: Bamboo.SMTPAdapter,
+#   server: "in-v3.mailjet.com",
+#   port: 587,
+#   username: "",
+#   password: "ohmawjghuhuzpxji",
+#   tls: :always,
+#   retries: 2
 
 # Configure esbuild (the version is required)
 config :esbuild,
