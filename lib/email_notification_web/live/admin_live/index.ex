@@ -30,7 +30,7 @@ defmodule EmailNotificationWeb.AdminLive.Index do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Admin")
+    |> assign(:page_title, "New Admin")  
     |> assign(:user, %User{})
   end
 
