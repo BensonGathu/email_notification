@@ -14,7 +14,7 @@
   <%!-- <:item title="Status"><%= @email.status %></:item> --%>
 </.list>
 
-<%!-- <div class="">
+<div class="">
   <br /><br />
   <br /><hr />
   <h3>
@@ -24,12 +24,14 @@
   </h3>
 
   <.table id="emails" rows={@failed_contacts} row_click={}>
-    <:col :let={{_id, failed_contact}}  label="From"><%= failed_contact %></:col>
+      <:col :let={failed_contact}  label="Name"><%= failed_contact.first_name %> <%= failed_contact.last_name %></:col>
+         
+    <:col :let={failed_contact}  label="Email"><%= failed_contact.email_address %></:col>
     
 
 
 </.table>
-</div> --%>
+</div>
 
 
 <.back navigate={~p"/emails"}>Back to emails</.back>
