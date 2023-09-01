@@ -32,7 +32,7 @@
     <%=email.body  %> 
   </:col>
  
-  <:col :let={{_id, email}} label="Status"><%= email.status %></:col>
+  <%!-- <:col :let={{_id, email}} label="Status"><%= email.status %></:col> --%>
   <!-- <:action :let={{id, email}}>
     <.link
       phx-click={JS.push("delete", value: %{id: email.id}) |> hide("##{id}")}

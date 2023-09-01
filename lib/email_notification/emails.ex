@@ -41,14 +41,48 @@ defmodule EmailNotification.Emails do
   def get_email!(id), do: Repo.get!(Email, id) |> Repo.preload(:contact)
 
 
-  def get_email_by_userID!(id) do
-    from(c in Email, where: [user_id: ^id])
-    |> Repo.all()
-    |> Repo.preload(:group)
-    |> Repo.preload(:contact)
+  # def get_email_by_userID!(id) do
+  #   from(c in Email, where: [user_id: ^id])
+  #   |> Repo.all()
+  #   |> Repo.preload(:group)
+  #   |> Repo.preload(:contact)
+  # end
 
 
+  def get_email_by_userID!(user_id) do
+    query =
+      from e in Email,
+      where: e.user_id == ^user_id,
+      left_join: es in assoc(e, :email_status),
+      group_by: e.id,
+      select: %{
+        email: e,
+        successful: fragment("SUM(CASE WHEN ? = ? THEN 1 ELSE 0 END)", es.status, ^"ok"),
+        failed: fragment("SUM(CASE WHEN ? = ? THEN 1 ELSE 0 END)", es.status, ^"Failed")
+      }
+
+    # Execute the query
+    results = Repo.all(query)
+
+    # Preload associations
+    preloaded_results = Enum.map(results, fn %{email: email, successful: successful, failed: failed} ->
+      email = Repo.preload(email, [:group, :contact])
+
+      %{
+        id: email.id,
+        group: email.group,
+        contact: email.contact,
+        successful: successful,
+        failed: failed,
+        subject: email.subject,
+        body: email.body,
+      }
+    end)
+
+    preloaded_results
   end
+
+
 
 #   def get_email_by_userID!(id) do
 #     Repo.transaction(fn ->
@@ -108,6 +142,8 @@ defmodule EmailNotification.Emails do
     %Email{}
     |> Email.changeset(attrs)
     |> Repo.insert()
+
+
   end
 
   @doc """

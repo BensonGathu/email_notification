@@ -27,13 +27,15 @@ config :email_notification, EmailNotificationWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
+
 config :email_notification, EmailNotification.Mailer,
 adapter: Swoosh.Adapters.SMTP,
 relay: "in-v3.mailjet.com",
 username: "c118aadad27b172b03ced6cbb7811aea",
 password: "cab17312e7a41cbc2b6ec65f80d4c1f3",
-tls: :always,
-ssl: false
+tls: :if_available,
+ssl: false,
+port: 25
 
 
 # Configure Bamboo email sender

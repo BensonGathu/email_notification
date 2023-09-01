@@ -8,8 +8,8 @@ defmodule EmailNotificationWeb.EmailLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     # current_user = socket.assigns.current_user
-    # IO.inspect("KKKKKKKKKKKKKKKKKKKKKK")
-    # IO.inspect( Emails.get_email_by_userID!(socket.assigns.current_user.id))
+
+
     socket = socket |> assign(:show_group_dropdown, false)
     socket =
       socket

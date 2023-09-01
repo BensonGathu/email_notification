@@ -1,9 +1,8 @@
 <.header>
-  Email <%= @email.id %>
-  <:subtitle>This is a email record from your database.</:subtitle>
+  <%= @email.subject %>
   <:actions>
     <.link patch={~p"/emails/#{@email}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit email</.button>
+      <%!-- <.button>Edit email</.button> --%>
     </.link>
   </:actions>
 </.header>
@@ -12,8 +11,26 @@
 
   <:item title="Subject"><%= @email.subject %></:item>
   <:item title="Body"><%= @email.body %></:item>
-  <:item title="Status"><%= @email.status %></:item>
+  <%!-- <:item title="Status"><%= @email.status %></:item> --%>
 </.list>
+
+<%!-- <div class="">
+  <br /><br />
+  <br /><hr />
+  <h3>
+    <b>
+      <h1 class="text-center">Failed Contacts</h1>
+    </b>
+  </h3>
+
+  <.table id="emails" rows={@failed_contacts} row_click={}>
+    <:col :let={{_id, failed_contact}}  label="From"><%= failed_contact %></:col>
+    
+
+
+</.table>
+</div> --%>
+
 
 <.back navigate={~p"/emails"}>Back to emails</.back>
 
@@ -22,9 +39,10 @@
     module={EmailNotificationWeb.EmailLive.FormComponent}
     id={@email.id}
     title={@page_title}
-    action={@live_action}
+    action={@live_action} 
     email={@email}
     patch={~p"/emails/#{@email}"}
      current_user={@current_user}
   />
-</.modal>
+</.modal> 
+ 
