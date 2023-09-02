@@ -42,7 +42,8 @@
     <:col :let={{_id, email}} label="Body"><%= email.body %></:col>
  <:col :let={{_id, email}} label="failed"><%= email.failed %></:col>
   <:col :let={{_id, email}} label="Success"><%= email.successful %></:col>
-    <%!-- <:col :let={{_id, email}} label="Status"></:col> --%>
+   
+    
     <:action :let={{id, email}}>
       <%= if @current_user.role.name == "admin" or @current_user.role.name == "superuser" or @current_user.plan == :gold  do %>
         <%!-- <%= if email.status == "Failed" do %> --%>
